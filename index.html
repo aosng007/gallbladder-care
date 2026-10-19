@@ -191,6 +191,147 @@
 
         .lead { color: var(--muted); margin: -0.4rem 0 1.2rem; }
 
+        /* ---------- Today ---------- */
+        .day-hero {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1.4rem;
+            align-items: center;
+        }
+
+        .day-ring {
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            color: white;
+            background: conic-gradient(#FFB74D var(--p, 0%), rgba(255, 255, 255, 0.25) 0);
+            padding: 10px;
+        }
+
+        .day-ring-inner {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            display: grid;
+            place-content: center;
+            background: linear-gradient(135deg, #2E7D32, #66BB6A);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .day-ring small { font-size: 0.8rem; opacity: 0.9; }
+        .day-ring b { font-size: 2.6rem; line-height: 1.1; }
+
+        .stage-name {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 700;
+            padding: 0.15rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .stage-tips { display: grid; gap: 0.5rem; margin: 0.6rem 0; }
+
+        .stage-tips div {
+            background: white;
+            border: 1px solid #E3ECE2;
+            border-radius: 12px;
+            padding: 0.55rem 0.8rem;
+            font-size: 0.92rem;
+        }
+
+        .stage-progress { font-size: 0.82rem; color: var(--muted); }
+        .stage-bar { height: 8px; border-radius: 999px; background: #EEF3EE; overflow: hidden; margin-top: 0.3rem; }
+        .stage-bar div { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #66BB6A, #FFB74D); transition: width 0.8s ease; }
+
+        .link-btn {
+            border: none;
+            background: none;
+            color: var(--primary);
+            font: inherit;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+        }
+
+        .date-setup { text-align: center; padding: 0.6rem 0; }
+        .date-setup .big { font-size: 2.6rem; }
+        .date-setup form { display: inline-flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; margin-top: 0.6rem; }
+        .date-setup .input-unit { min-width: 200px; }
+
+        .milestone {
+            margin-top: 1rem;
+            padding: 0.9rem 1.1rem;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #FFF3E0, #FCE4EC);
+            border: 1px solid #F8D7C4;
+            font-weight: 600;
+            color: #AD4A1F;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .note-card {
+            position: relative;
+            border-radius: 18px;
+            padding: 1.8rem 1.6rem 1.3rem;
+            background:
+                repeating-linear-gradient(transparent 0 31px, rgba(232, 160, 140, 0.18) 31px 32px),
+                linear-gradient(160deg, #FFFDF7, #FFF4EC);
+            border: 1px solid #F5DFD2;
+            box-shadow: 0 10px 30px rgba(216, 120, 90, 0.10);
+        }
+
+        .note-card::before {
+            content: "💌";
+            position: absolute;
+            top: -18px; left: 22px;
+            font-size: 2rem;
+        }
+
+        .note-text {
+            font-size: 1.25rem;
+            line-height: 2;
+            color: #6D3B2A;
+            min-height: 2em;
+        }
+
+        .note-text.swap { animation: noteIn 0.5s ease; }
+
+        @keyframes noteIn {
+            from { opacity: 0; transform: translateY(8px) rotate(-1deg); }
+            to { opacity: 1; transform: none; }
+        }
+
+        .note-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.8rem;
+            color: #A0705C;
+            font-size: 0.9rem;
+        }
+
+        .note-sign { font-style: italic; }
+
+        .confetti {
+            position: fixed;
+            top: -40px;
+            z-index: 50;
+            pointer-events: none;
+            font-size: 1.4rem;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(540deg); opacity: 0.6; }
+        }
+
         /* ---------- Principles ---------- */
         .grid {
             display: grid;
@@ -810,7 +951,8 @@
         }
 
         @media (max-width: 640px) {
-            .food-lists, .classic-grid, .breath-wrap, .bmi-wrap { grid-template-columns: 1fr; }
+            .food-lists, .classic-grid, .breath-wrap, .bmi-wrap, .day-hero { grid-template-columns: 1fr; }
+            .day-ring { margin: 0 auto; }
             .ex-card .row { grid-template-columns: 1fr; }
             .ex-card .row .k { justify-self: start; padding: 0.15rem 0.7rem; }
             .card { padding: 1.2rem; }
@@ -844,7 +986,8 @@
 
     <nav class="tabs">
         <div class="tab-list" role="tablist">
-            <button class="tab-btn active" role="tab" data-tab="principles">💡 饮食原则</button>
+            <button class="tab-btn active" role="tab" data-tab="today">🌱 今日</button>
+            <button class="tab-btn" role="tab" data-tab="principles">💡 饮食原则</button>
             <button class="tab-btn" role="tab" data-tab="recipes">🍽️ 食谱搭配</button>
             <button class="tab-btn" role="tab" data-tab="exercise">🏃‍♀️ 运动</button>
             <button class="tab-btn" role="tab" data-tab="bmi">📏 BMI</button>
@@ -855,7 +998,60 @@
     <main class="container">
 
         <!-- ================= 饮食原则 ================= -->
-        <section class="panel active" id="principles" role="tabpanel">
+        <!-- ================= 今日 ================= -->
+        <section class="panel active" id="today" role="tabpanel">
+            <div class="card">
+                <h2>🌱 康复进度</h2>
+
+                <div class="date-setup" id="dateSetup" hidden>
+                    <div class="big">🗓️</div>
+                    <p style="margin:0.3rem 0 0;">告诉我手术日期，就能看到「今天是术后第几天」和这个阶段的小建议。</p>
+                    <form id="dateForm">
+                        <div class="input-unit"><input id="surgeryDate" type="date" required></div>
+                        <button class="btn btn-primary" type="submit">开始记录</button>
+                    </form>
+                    <p class="combo-count" style="margin-top:0.6rem;">日期只保存在这台设备上。</p>
+                </div>
+
+                <div id="dayView" hidden>
+                    <div class="day-hero">
+                        <div class="day-ring" id="dayRing">
+                            <div class="day-ring-inner">
+                                <small id="dayPrefix">术后第</small>
+                                <b id="dayNum">0</b>
+                                <small id="daySuffix">天</small>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="stage-name" id="stageName"></span>
+                            <div class="stage-tips">
+                                <div>🍽️ <strong>饮食：</strong><span id="stageFood"></span></div>
+                                <div>🚶‍♀️ <strong>运动：</strong><span id="stageMove"></span></div>
+                            </div>
+                            <div class="stage-progress">
+                                <span id="stageNext"></span>
+                                <div class="stage-bar"><div id="stageBar" style="width:0"></div></div>
+                            </div>
+                            <p style="margin:0.6rem 0 0;"><button class="link-btn" id="dateEdit" type="button">修改手术日期</button></p>
+                        </div>
+                    </div>
+                    <div class="milestone" id="milestone" hidden></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>💌 今日寄语</h2>
+                <div class="note-card">
+                    <div class="note-text" id="noteText"></div>
+                    <div class="note-foot">
+                        <button class="link-btn" id="noteNext" type="button">换一句 ↻</button>
+                        <span class="note-sign" id="noteSign"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel" id="principles" role="tabpanel">
             <div class="card">
                 <h2>💡 核心饮食原则</h2>
                 <div class="grid">
@@ -1169,7 +1365,7 @@
         // ---------- Tabs ----------
         const tabs = document.querySelectorAll('.tab-btn');
         function showTab(id) {
-            if (!document.getElementById(id)) id = 'principles';
+            if (!document.querySelector(`.panel[id="${CSS.escape(id)}"]`)) id = 'today';
             tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === id));
             document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
             if (id === 'status') openStatus();
@@ -1181,13 +1377,191 @@
         window.addEventListener('hashchange', () => showTab(location.hash.slice(1)));
         showTab(location.hash.slice(1));
 
+        // ---------- 今日：术后第 N 天 + 暖心寄语 ----------
+        // 想换成自己的话：直接修改下面的署名和句子即可
+        const NOTE_SIGNATURE = '—— 爱你的家人';
+        const NOTES = [
+            '今天也要按时吃饭，好好照顾自己哦。',
+            '散步的时候，记得抬头看看天空。☁️',
+            '慢慢来，身体每天都在悄悄变好。',
+            '喝杯温水吧，你已经很棒了。',
+            '不舒服的时候别硬撑，随时告诉我们。',
+            '今天的你，比昨天又恢复了一点点。🌱',
+            '清淡的饭菜里，也藏着满满的爱。',
+            '累了就休息，休息也是在康复。',
+            '记得深呼吸，把烦恼都呼出去。',
+            '你笑起来的样子最好看了。😊',
+            '少食多餐，肚子会感谢你的。',
+            '今天也有人在想着你。',
+            '好好睡一觉，明天又是新的一天。🌙',
+            '一步一步来，我们一直陪着你。',
+            '吃饭慢一点，细嚼慢咽更好消化。',
+            '别着急，健康是最好的礼物。🎁',
+            '今天想吃什么？我们一起做。',
+            '晒晒太阳，心情也会变好。☀️',
+            '你一直都很勇敢，这次也是。',
+            '每一次散步，都是在给身体加油。',
+            '爱你，不只是今天。❤️',
+            '小小的进步，也值得开心。',
+            '今天的任务：开心一点点。',
+            '有任何不舒服，记得及时看医生哦。',
+            '你的健康，是全家最大的心愿。',
+            '春夏秋冬，我们都在你身边。',
+            '今天也辛苦啦，抱抱。🤗',
+            '慢慢吃，慢慢走，慢慢好起来。',
+            '偶尔馋了也没关系，少量尝一口就好。',
+            '谢谢你好好照顾自己。'
+        ];
+
+        // Stages mirror the exercise timeline; `until` is the last day of each stage
+        const STAGES = [
+            { until: 14, name: '术后早期',
+              food: '以清淡易消化为主，从稀粥、软面条、蒸蛋白开始，几乎不放油，少量多餐。',
+              move: '室内或小区内慢走，每次 5–10 分钟、每天数次，配合腹式呼吸。' },
+            { until: 28, name: '恢复期',
+              food: '逐步恢复正常的低脂饮食，每餐用油 5–10g，新食物一次只加一种。',
+              move: '散步逐渐延长到每次 20–30 分钟，可加入简单拉伸。' },
+            { until: 42, name: '伤口愈合期',
+              food: '可以多尝试食谱里的不同搭配，留意哪些食物会引起腹胀或腹泻。',
+              move: '经医生评估后，可尝试慢跑、游泳、温和瑜伽或八段锦。' },
+            { until: 180, name: '适应期',
+              food: '身体在适应没有胆囊的消化方式，继续坚持低脂、少食多餐。',
+              move: '以每周 150 分钟中等强度活动为目标，循序渐进。' },
+            { until: Infinity, name: '长期保持',
+              food: '保持低脂均衡饮食的好习惯，偶尔嘴馋也只吃少量。',
+              move: '规律运动，在无不适的前提下慢慢加入轻量力量训练。' }
+        ];
+
+        const MILESTONES = {
+            7: '🎉 术后整整一周了！最难的几天已经过去，真为你骄傲。',
+            14: '🌼 两周啦！身体在一天天变好，继续加油。',
+            30: '🎊 满月啦！一个月的坚持，值得好好表扬自己。',
+            50: '✨ 第 50 天！慢慢来，你做得很好。',
+            100: '💯 术后 100 天！谢谢你这么认真地照顾自己。',
+            180: '🌈 半年了！回头看看，已经走了好远。',
+            365: '🎂 一周年快乐！愿以后的每一天都健康平安。'
+        };
+
+        const DAY_MS = 86400000;
+        const todayUtc = () => { const d = new Date(); return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()); };
+        const dateUtc = s => { const [y, m, d] = s.split('-').map(Number); return Date.UTC(y, m - 1, d); };
+        const dayIndex = () => Math.floor(todayUtc() / DAY_MS);
+
+        function renderToday() {
+            const saved = localStorage.getItem('gc-surgery-date');
+            document.getElementById('dateSetup').hidden = !!saved;
+            document.getElementById('dayView').hidden = !saved;
+            if (!saved) {
+                document.getElementById('surgeryDate').max = new Date().toISOString().slice(0, 10);
+                return;
+            }
+
+            const days = Math.round((todayUtc() - dateUtc(saved)) / DAY_MS);
+            const ring = document.getElementById('dayRing');
+
+            if (days < 0) {
+                document.getElementById('dayPrefix').textContent = '距离手术还有';
+                document.getElementById('dayNum').textContent = -days;
+                document.getElementById('stageName').textContent = '术前准备';
+                document.getElementById('stageFood').textContent = '术前几天饮食清淡，按医院要求禁食禁水。';
+                document.getElementById('stageMove').textContent = '保持日常活动，好好休息，放松心情。';
+                document.getElementById('stageNext').textContent = '我们会一直陪着你 ❤️';
+                document.getElementById('stageBar').style.width = '0';
+                ring.style.setProperty('--p', '0%');
+                document.getElementById('milestone').hidden = true;
+                return;
+            }
+
+            const idx = STAGES.findIndex(s => days <= s.until);
+            const stage = STAGES[idx];
+            const start = idx === 0 ? 0 : STAGES[idx - 1].until + 1;
+
+            document.getElementById('dayPrefix').textContent = days === 0 ? '今天是' : '术后第';
+            document.getElementById('dayNum').textContent = days === 0 ? '手术日' : days;
+            document.getElementById('dayNum').style.fontSize = days === 0 ? '1.6rem' : '';
+            document.getElementById('daySuffix').textContent = days === 0 ? '辛苦了 ❤️' : '天';
+            document.getElementById('stageName').textContent = `🌿 ${stage.name}`;
+            document.getElementById('stageFood').textContent = stage.food;
+            document.getElementById('stageMove').textContent = stage.move;
+
+            const nextMilestone = Object.keys(MILESTONES).map(Number).find(m => m > days);
+            if (stage.until === Infinity) {
+                document.getElementById('stageNext').textContent = nextMilestone
+                    ? `距离第 ${nextMilestone} 天还有 ${nextMilestone - days} 天` : '每一天都是新的开始 🌱';
+                document.getElementById('stageBar').style.width = '100%';
+            } else {
+                const pct = Math.round((days - start + 1) / (stage.until - start + 1) * 100);
+                document.getElementById('stageNext').textContent =
+                    `「${stage.name}」进度 ${pct}% · 还有 ${stage.until - days + 1} 天进入「${STAGES[idx + 1].name}」`;
+                document.getElementById('stageBar').style.width = pct + '%';
+            }
+            // Ring fills toward the next milestone, and is full on the milestone day itself
+            const prevMilestone = Object.keys(MILESTONES).map(Number).filter(m => m <= days).pop() || 0;
+            ring.style.setProperty('--p', MILESTONES[days] || !nextMilestone
+                ? '100%' : `${(days - prevMilestone) / (nextMilestone - prevMilestone) * 100}%`);
+
+            const milestoneEl = document.getElementById('milestone');
+            milestoneEl.hidden = !MILESTONES[days];
+            if (MILESTONES[days]) {
+                milestoneEl.textContent = MILESTONES[days];
+                const flag = `gc-confetti-${days}`;
+                if (!localStorage.getItem(flag)) {
+                    localStorage.setItem(flag, '1');
+                    celebrate();
+                }
+            }
+        }
+
+        function celebrate() {
+            if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const bits = ['🎉', '🌸', '✨', '💚', '🎊', '🌼'];
+            for (let i = 0; i < 36; i++) {
+                const s = document.createElement('span');
+                s.className = 'confetti';
+                s.textContent = bits[i % bits.length];
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.animationDuration = 2.5 + Math.random() * 2 + 's';
+                s.style.animationDelay = Math.random() * 0.8 + 's';
+                document.body.appendChild(s);
+                s.addEventListener('animationend', () => s.remove());
+            }
+        }
+
+        document.getElementById('dateForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const v = document.getElementById('surgeryDate').value;
+            if (!v) return;
+            localStorage.setItem('gc-surgery-date', v);
+            renderToday();
+        });
+        document.getElementById('dateEdit').addEventListener('click', () => {
+            document.getElementById('surgeryDate').value = localStorage.getItem('gc-surgery-date') || '';
+            localStorage.removeItem('gc-surgery-date');
+            renderToday();
+        });
+
+        // Same note all day; "换一句" cycles through the rest
+        let noteIdx = dayIndex() % NOTES.length;
+        function showNote(animate) {
+            const el = document.getElementById('noteText');
+            el.textContent = NOTES[noteIdx];
+            if (animate) { el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap'); }
+        }
+        document.getElementById('noteSign').textContent = NOTE_SIGNATURE;
+        document.getElementById('noteNext').addEventListener('click', () => {
+            noteIdx = (noteIdx + 1 + Math.floor(Math.random() * (NOTES.length - 1))) % NOTES.length;
+            showNote(true);
+        });
+        showNote(false);
+        renderToday();
+
         // ---------- Visit tracking (skipped on #status and for the owner's browser) ----------
         if (location.hash !== '#status' && !localStorage.getItem('gc-notrack')) {
             fetch('/api/track', {
                 method: 'POST',
                 keepalive: true,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ page: location.hash || '#principles', ref: document.referrer })
+                body: JSON.stringify({ page: location.hash || '#today', ref: document.referrer })
             }).catch(() => {});
         }
 
