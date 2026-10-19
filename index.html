@@ -594,6 +594,148 @@
 
         .avoid strong { color: #C2410C; display: block; margin-bottom: 0.2rem; }
 
+        /* ---------- BMI ---------- */
+        .bmi-wrap {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .bmi-form { display: grid; gap: 0.9rem; }
+
+        .field label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .field label small { color: var(--muted); font-weight: normal; }
+
+        .input-unit {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1.5px solid #D7E6D5;
+            border-radius: 12px;
+            padding: 0 0.9rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-unit:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.12); }
+
+        .input-unit input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font: inherit;
+            font-size: 1.05rem;
+            padding: 0.6rem 0;
+            min-width: 0;
+        }
+
+        .input-unit span { color: var(--muted); font-size: 0.9rem; }
+
+        .bmi-result {
+            border-radius: 16px;
+            background: white;
+            border: 1px solid #E3ECE2;
+            padding: 1.3rem;
+            text-align: center;
+        }
+
+        .bmi-value {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--level, var(--muted));
+            transition: color 0.3s ease;
+        }
+
+        .bmi-level {
+            display: inline-block;
+            margin-top: 0.4rem;
+            padding: 0.2rem 0.9rem;
+            border-radius: 999px;
+            font-weight: 700;
+            color: white;
+            background: var(--level, #B0BEC5);
+            transition: background 0.3s ease;
+        }
+
+        .bmi-scale { position: relative; margin: 1.6rem 0 0.4rem; }
+
+        .bmi-bar {
+            display: grid;
+            grid-template-columns: 3.5fr 5.5fr 4fr 7fr;
+            height: 14px;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .bmi-bar div:nth-child(1) { background: #4FC3F7; }
+        .bmi-bar div:nth-child(2) { background: #66BB6A; }
+        .bmi-bar div:nth-child(3) { background: #FFB74D; }
+        .bmi-bar div:nth-child(4) { background: #EF5350; }
+
+        .bmi-marker {
+            position: absolute;
+            top: -6px;
+            width: 4px;
+            height: 26px;
+            margin-left: -2px;
+            border-radius: 4px;
+            background: var(--text);
+            box-shadow: 0 0 0 3px white;
+            transition: left 0.6s cubic-bezier(.2, .9, .3, 1.2);
+        }
+
+        .bmi-ticks {
+            display: grid;
+            grid-template-columns: 3.5fr 5.5fr 4fr 7fr;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 0.4rem;
+            text-align: center;
+        }
+
+        .bmi-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+            text-align: left;
+        }
+
+        .bmi-info .box {
+            background: var(--primary-light);
+            border-radius: 12px;
+            padding: 0.7rem 0.9rem;
+            font-size: 0.88rem;
+        }
+
+        .bmi-info .box b { display: block; color: var(--primary-dark); font-size: 1.05rem; }
+
+        .bmi-advice {
+            margin-top: 1rem;
+            text-align: left;
+            background: #FFFDF6;
+            border: 1px solid #F5E6C4;
+            border-radius: 12px;
+            padding: 0.9rem 1rem;
+            font-size: 0.92rem;
+        }
+
+        .bmi-advice a { color: var(--primary); font-weight: 600; }
+
+        .ref-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+        .ref-table th, .ref-table td { padding: 0.55rem 0.8rem; text-align: left; border-bottom: 1px solid #EEF3EE; }
+        .ref-table th { color: var(--muted); font-weight: 600; font-size: 0.82rem; }
+        .ref-table .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 0.4rem; }
+
         /* ---------- Care ---------- */
         .tips {
             list-style: none;
@@ -635,7 +777,7 @@
         }
 
         @media (max-width: 640px) {
-            .food-lists, .classic-grid, .breath-wrap { grid-template-columns: 1fr; }
+            .food-lists, .classic-grid, .breath-wrap, .bmi-wrap { grid-template-columns: 1fr; }
             .ex-card .row { grid-template-columns: 1fr; }
             .ex-card .row .k { justify-self: start; padding: 0.15rem 0.7rem; }
             .card { padding: 1.2rem; }
@@ -672,6 +814,7 @@
             <button class="tab-btn active" role="tab" data-tab="principles">💡 饮食原则</button>
             <button class="tab-btn" role="tab" data-tab="recipes">🍽️ 食谱搭配</button>
             <button class="tab-btn" role="tab" data-tab="exercise">🏃‍♀️ 运动</button>
+            <button class="tab-btn" role="tab" data-tab="bmi">📏 BMI</button>
             <button class="tab-btn" role="tab" data-tab="care">💗 护理</button>
         </div>
     </nav>
@@ -862,6 +1005,63 @@
                     <div class="avoid"><strong>饭后别马上剧烈运动</strong>餐后 30-60 分钟再进行慢跑等运动，饭后宜慢走。</div>
                     <div class="avoid"><strong>出现不适立即停止</strong>运动中若右上腹痛、头晕、心慌，应停止休息，必要时就医。</div>
                 </div>
+            </div>
+        </section>
+
+        <!-- ================= BMI ================= -->
+        <section class="panel" id="bmi" role="tabpanel">
+            <div class="card">
+                <h2>📏 BMI 体重指数计算器</h2>
+                <p class="lead">BMI = 体重（kg）÷ 身高（m）²。术后保持健康体重，可以减轻胆道和消化系统的负担。</p>
+
+                <div class="bmi-wrap">
+                    <div class="bmi-form">
+                        <div class="field">
+                            <label for="bmiHeight">身高</label>
+                            <div class="input-unit"><input id="bmiHeight" type="number" inputmode="decimal" min="100" max="230" step="0.1" placeholder="例如 160"><span>厘米</span></div>
+                        </div>
+                        <div class="field">
+                            <label for="bmiWeight">体重</label>
+                            <div class="input-unit"><input id="bmiWeight" type="number" inputmode="decimal" min="25" max="250" step="0.1" placeholder="例如 55"><span>公斤</span></div>
+                        </div>
+                        <div class="field">
+                            <label for="bmiWaist">腰围 <small>（选填，肚脐上方一圈）</small></label>
+                            <div class="input-unit"><input id="bmiWaist" type="number" inputmode="decimal" min="40" max="200" step="0.1" placeholder="例如 75"><span>厘米</span></div>
+                        </div>
+                        <button class="btn btn-ghost" id="bmiReset" type="button">↺ 清空重填</button>
+                    </div>
+
+                    <div class="bmi-result" id="bmiResult">
+                        <div class="combo-count">你的 BMI</div>
+                        <div class="bmi-value" id="bmiValue">--</div>
+                        <div class="bmi-level" id="bmiLevel">请输入身高和体重</div>
+
+                        <div class="bmi-scale">
+                            <div class="bmi-bar"><div></div><div></div><div></div><div></div></div>
+                            <div class="bmi-marker" id="bmiMarker" style="left:0; opacity:0;"></div>
+                            <div class="bmi-ticks"><span>偏瘦 &lt;18.5</span><span>正常</span><span>超重 24</span><span>肥胖 ≥28</span></div>
+                        </div>
+
+                        <div class="bmi-info">
+                            <div class="box">健康体重范围<b id="bmiRange">--</b></div>
+                            <div class="box">与正常范围相差<b id="bmiDiff">--</b></div>
+                        </div>
+
+                        <div class="bmi-advice" id="bmiAdvice">输入数据后，这里会显示针对你的饮食与运动小建议。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📋 中国成人 BMI 参考标准</h2>
+                <table class="ref-table">
+                    <tr><th>分类</th><th>BMI 范围</th><th>说明</th></tr>
+                    <tr><td><span class="dot" style="background:#4FC3F7"></span>偏瘦</td><td>&lt; 18.5</td><td>营养可能不足，注意补充优质蛋白</td></tr>
+                    <tr><td><span class="dot" style="background:#66BB6A"></span>正常</td><td>18.5 – 23.9</td><td>继续保持低脂均衡饮食和规律运动</td></tr>
+                    <tr><td><span class="dot" style="background:#FFB74D"></span>超重</td><td>24.0 – 27.9</td><td>建议控制总热量，逐步增加活动量</td></tr>
+                    <tr><td><span class="dot" style="background:#EF5350"></span>肥胖</td><td>≥ 28.0</td><td>建议在医生或营养师指导下减重</td></tr>
+                </table>
+                <p class="combo-count" style="margin-top:0.8rem;">* 女性腰围 ≥ 85 厘米为中心型肥胖，80–85 厘米为腹型肥胖前期。BMI 不适用于孕妇、运动员及 18 岁以下人群；术后早期体重波动属常见现象，请勿急于减重。</p>
             </div>
         </section>
 
@@ -1093,6 +1293,86 @@
         updateCount();
         MEALS.forEach(rollMeal);
         renderMeals();
+
+        // ---------- BMI calculator (Chinese adult standard) ----------
+        const BMI_LEVELS = [
+            { max: 18.5, name: '偏瘦', color: '#29B6F6',
+              advice: '体重偏轻。术后消化吸收能力下降时容易掉秤，可在<a href="#recipes">食谱搭配</a>中多选蒸蛋白、鱼虾、豆腐等优质蛋白，坚持少食多餐，不要靠吃油腻食物增重。' },
+            { max: 24, name: '正常', color: '#43A047',
+              advice: '体重在正常范围，非常好！继续保持低脂均衡饮食，配合每天约 30 分钟的<a href="#exercise">轻松散步</a>即可。' },
+            { max: 28, name: '超重', color: '#FB8C00',
+              advice: '略超重。建议控制主食和用油总量，晚餐清淡少量，并按<a href="#exercise">运动节奏</a>逐步增加有氧活动。每周减重 0.5 公斤左右即可，过快减重反而不利于胆道健康。' },
+            { max: Infinity, name: '肥胖', color: '#E53935',
+              advice: '已达肥胖标准。建议在医生或营养师指导下制定减重计划，避免节食或快速减重；可先从<a href="#recipes">低脂食谱</a>和每日散步开始。' }
+        ];
+
+        const bmiEls = {
+            h: document.getElementById('bmiHeight'),
+            w: document.getElementById('bmiWeight'),
+            waist: document.getElementById('bmiWaist'),
+            value: document.getElementById('bmiValue'),
+            level: document.getElementById('bmiLevel'),
+            marker: document.getElementById('bmiMarker'),
+            range: document.getElementById('bmiRange'),
+            diff: document.getElementById('bmiDiff'),
+            advice: document.getElementById('bmiAdvice'),
+            result: document.getElementById('bmiResult')
+        };
+
+        function calcBmi() {
+            const h = parseFloat(bmiEls.h.value) / 100;
+            const w = parseFloat(bmiEls.w.value);
+            const waist = parseFloat(bmiEls.waist.value);
+
+            if (!(h >= 1 && h <= 2.3 && w >= 25 && w <= 250)) {
+                bmiEls.result.style.removeProperty('--level');
+                bmiEls.value.textContent = '--';
+                bmiEls.level.textContent = '请输入身高和体重';
+                bmiEls.marker.style.opacity = 0;
+                bmiEls.range.textContent = '--';
+                bmiEls.diff.textContent = '--';
+                bmiEls.advice.innerHTML = '输入数据后，这里会显示针对你的饮食与运动小建议。';
+                return;
+            }
+
+            const bmi = w / (h * h);
+            const lvl = BMI_LEVELS.find(l => bmi < l.max);
+            const low = 18.5 * h * h, high = 23.9 * h * h;
+
+            bmiEls.result.style.setProperty('--level', lvl.color);
+            bmiEls.value.textContent = bmi.toFixed(1);
+            bmiEls.level.textContent = lvl.name;
+
+            // Scale spans BMI 15 → 35, matching the bar's grid fractions
+            const pct = Math.min(Math.max((bmi - 15) / 20, 0), 1) * 100;
+            bmiEls.marker.style.left = pct + '%';
+            bmiEls.marker.style.opacity = 1;
+
+            bmiEls.range.textContent = `${low.toFixed(1)} – ${high.toFixed(1)} 公斤`;
+            bmiEls.diff.textContent = bmi < 18.5 ? `需增加 ${(low - w).toFixed(1)} 公斤`
+                : bmi >= 24 ? `需减少 ${(w - high).toFixed(1)} 公斤`
+                : '已在范围内 🎉';
+
+            let advice = lvl.advice;
+            if (waist >= 85) advice += '<br><br>⚠️ 腰围 ≥ 85 厘米，属于<strong>中心型肥胖</strong>，腹部脂肪偏多，建议重点减少腰腹脂肪。';
+            else if (waist >= 80) advice += '<br><br>💡 腰围在 80–85 厘米之间，属于腹型肥胖前期，注意控制腰围。';
+            bmiEls.advice.innerHTML = advice;
+        }
+
+        [bmiEls.h, bmiEls.w, bmiEls.waist].forEach(el => el.addEventListener('input', calcBmi));
+        document.getElementById('bmiReset').addEventListener('click', () => {
+            bmiEls.h.value = bmiEls.w.value = bmiEls.waist.value = '';
+            calcBmi();
+            bmiEls.h.focus();
+        });
+        bmiEls.advice.addEventListener('click', e => {
+            const a = e.target.closest('a[href^="#"]');
+            if (!a) return;
+            e.preventDefault();
+            history.replaceState(null, '', a.getAttribute('href'));
+            showTab(a.getAttribute('href').slice(1));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
         // ---------- Breathing guide ----------
         const circle = document.getElementById('breathCircle');
