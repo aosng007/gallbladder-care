@@ -858,6 +858,13 @@
 
         .input-unit span { color: var(--muted); font-size: 0.9rem; }
 
+        .scale-shot { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted); }
+        .scale-shot .icon-btn { flex-shrink: 0; }
+        .scale-shot .icon-btn.busy { opacity: 0.6; pointer-events: none; }
+        .scale-shot img { width: 44px; height: 44px; object-fit: cover; border-radius: 8px; border: 1px solid #E3ECE2; }
+        .scale-shot #scaleMsg.ok { color: var(--primary-dark); }
+        .scale-shot #scaleMsg.err { color: #C2410C; }
+
         .bmi-result {
             border-radius: 16px;
             background: white;
@@ -1376,6 +1383,13 @@
                         <div class="field">
                             <label for="bmiWeight">体重</label>
                             <div class="input-unit"><input id="bmiWeight" type="number" inputmode="decimal" min="25" max="250" step="0.1" placeholder="例如 55"><span>公斤</span></div>
+                            <div class="scale-shot">
+                                <label class="icon-btn" id="scaleBtn">📷 拍秤读数
+                                    <input type="file" id="scaleShot" accept="image/*" capture="environment" hidden>
+                                </label>
+                                <img id="scalePreview" alt="秤的照片" hidden>
+                                <span id="scaleMsg"></span>
+                            </div>
                         </div>
                         <div class="field">
                             <label for="bmiWaist">腰围 <small>（选填，肚脐上方一圈）</small></label>
@@ -2343,6 +2357,67 @@
         });
 
         renderLog();
+
+        // ---------- 拍秤读数: photo -> /api/scale -> weight field (user confirms before saving) ----------
+        const scaleMsg = document.getElementById('scaleMsg');
+        const scaleBtn = document.getElementById('scaleBtn');
+        const setScaleMsg = (text, kind = '') => { scaleMsg.textContent = text; scaleMsg.className = kind; };
+
+        // Downscale to keep uploads small; the browser applies EXIF rotation when drawing
+        async function compressPhoto(file, maxSide = 1024) {
+            const url = URL.createObjectURL(file);
+            try {
+                const img = new Image();
+                img.src = url;
+                await img.decode();
+                const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.round(img.naturalWidth * scale);
+                canvas.height = Math.round(img.naturalHeight * scale);
+                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                return canvas.toDataURL('image/jpeg', 0.82);
+            } finally {
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        document.getElementById('scaleShot').addEventListener('change', async e => {
+            const file = e.target.files[0];
+            e.target.value = '';
+            if (!file) return;
+
+            scaleBtn.classList.add('busy');
+            setScaleMsg('正在读取秤上的数字…');
+            try {
+                const dataUrl = await compressPhoto(file);
+                const preview = document.getElementById('scalePreview');
+                preview.src = dataUrl;
+                preview.hidden = false;
+
+                const res = await fetch('/api/scale', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: dataUrl })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    setScaleMsg(data.error || `识别失败（${res.status}），请手动输入`, 'err');
+                    return;
+                }
+                if (!(data.kg >= 25 && data.kg <= 250)) {
+                    setScaleMsg('没看清数字，请靠近一点、避开反光再拍，或手动输入', 'err');
+                    return;
+                }
+                bmiEls.w.value = data.kg.toFixed(1);
+                calcBmi();
+                const note = data.unit === 'jin' ? `（秤上是 ${data.weight} 斤）` : data.unit === 'lb' ? `（秤上是 ${data.weight} 磅）` : '';
+                setScaleMsg(`读到 ${data.kg.toFixed(1)} 公斤${note}，核对无误再点「记录本次」`, 'ok');
+            } catch {
+                setScaleMsg('照片读取失败，请重试或手动输入', 'err');
+            } finally {
+                scaleBtn.classList.remove('busy');
+            }
+        });
         bmiEls.advice.addEventListener('click', e => {
             const a = e.target.closest('a[href^="#"]');
             if (!a) return;
