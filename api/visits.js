@@ -1,6 +1,6 @@
 import { timingSafeEqual } from 'node:crypto';
 import { isConfigured, pipeline, VISITS_KEY, MAX_VISITS } from './_redis.js';
-import { clientIp, isExcluded } from './_ip.js';
+import { clientIp, isExcluded, isIgnoredVisit } from './_ip.js';
 
 function keyMatches(given) {
     const expected = process.env.STATUS_KEY;
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
         const [items] = await pipeline([['LRANGE', VISITS_KEY, '0', String(MAX_VISITS - 1)]]);
         const visits = items.map(s => {
             try { return JSON.parse(s); } catch { return null; }
-        }).filter(v => v && !isExcluded(v.ip));
+        }).filter(v => v && !isIgnoredVisit(v));
         const you = clientIp(req);
         res.status(200).json({ visits, you, youExcluded: isExcluded(you) });
     } catch (err) {

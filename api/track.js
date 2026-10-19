@@ -1,5 +1,5 @@
 import { isConfigured, pipeline, VISITS_KEY, MAX_VISITS } from './_redis.js';
-import { clientIp, isExcluded } from './_ip.js';
+import { clientIp, isIgnoredVisit } from './_ip.js';
 
 const header = (req, name) => {
     const v = req.headers[name];
@@ -24,17 +24,11 @@ export default async function handler(req, res) {
         return;
     }
 
-    const ip = clientIp(req);
-    if (isExcluded(ip)) {
-        res.status(204).end();
-        return;
-    }
-
     const body = req.body && typeof req.body === 'object' ? req.body : {};
 
     const visit = {
         t: new Date().toISOString(),
-        ip,
+        ip: clientIp(req),
         country: header(req, 'x-vercel-ip-country'),
         region: header(req, 'x-vercel-ip-country-region'),
         city: header(req, 'x-vercel-ip-city'),
@@ -42,6 +36,12 @@ export default async function handler(req, res) {
         page: clip(body.page, 40),
         ref: clip(body.ref, 200)
     };
+
+    // Owner IPs, bots/test tools and excluded cities are not recorded
+    if (isIgnoredVisit(visit)) {
+        res.status(204).end();
+        return;
+    }
 
     try {
         await pipeline([
