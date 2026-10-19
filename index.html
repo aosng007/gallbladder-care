@@ -1009,6 +1009,7 @@
                     <form id="dateForm">
                         <div class="input-unit"><input id="surgeryDate" type="date" required></div>
                         <button class="btn btn-primary" type="submit">开始记录</button>
+                        <button class="btn btn-ghost" id="dateCancel" type="button" hidden>取消</button>
                     </form>
                     <p class="combo-count" style="margin-top:0.6rem;">日期只保存在这台设备上。</p>
                 </div>
@@ -1447,14 +1448,20 @@
         const dateUtc = s => { const [y, m, d] = s.split('-').map(Number); return Date.UTC(y, m - 1, d); };
         const dayIndex = () => Math.floor(todayUtc() / DAY_MS);
 
+        let editingDate = false;
+
+        function savedSurgeryDate() {
+            const v = localStorage.getItem('gc-surgery-date');
+            return /^\d{4}-\d{2}-\d{2}$/.test(v || '') && !isNaN(dateUtc(v)) ? v : null;
+        }
+
         function renderToday() {
-            const saved = localStorage.getItem('gc-surgery-date');
-            document.getElementById('dateSetup').hidden = !!saved;
-            document.getElementById('dayView').hidden = !saved;
-            if (!saved) {
-                document.getElementById('surgeryDate').max = new Date().toISOString().slice(0, 10);
-                return;
-            }
+            const saved = savedSurgeryDate();
+            const showSetup = !saved || editingDate;
+            document.getElementById('dateSetup').hidden = !showSetup;
+            document.getElementById('dayView').hidden = showSetup;
+            document.getElementById('dateCancel').hidden = !saved;
+            if (showSetup) return;
 
             const days = Math.round((todayUtc() - dateUtc(saved)) / DAY_MS);
             const ring = document.getElementById('dayRing');
@@ -1532,11 +1539,16 @@
             const v = document.getElementById('surgeryDate').value;
             if (!v) return;
             localStorage.setItem('gc-surgery-date', v);
+            editingDate = false;
             renderToday();
         });
         document.getElementById('dateEdit').addEventListener('click', () => {
-            document.getElementById('surgeryDate').value = localStorage.getItem('gc-surgery-date') || '';
-            localStorage.removeItem('gc-surgery-date');
+            document.getElementById('surgeryDate').value = savedSurgeryDate() || '';
+            editingDate = true;
+            renderToday();
+        });
+        document.getElementById('dateCancel').addEventListener('click', () => {
+            editingDate = false;
             renderToday();
         });
 
@@ -1554,6 +1566,16 @@
         });
         showNote(false);
         renderToday();
+
+        // A tab left open overnight refreshes its day count and note when shown again
+        let shownDay = dayIndex();
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState !== 'visible' || dayIndex() === shownDay) return;
+            shownDay = dayIndex();
+            noteIdx = shownDay % NOTES.length;
+            showNote(true);
+            renderToday();
+        });
 
         // ---------- Visit tracking (skipped on #status and for the owner's browser) ----------
         if (location.hash !== '#status' && !localStorage.getItem('gc-notrack')) {
