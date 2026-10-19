@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- App icon: white monstera leaf on a green gradient (full-bleed; iOS/Android apply their own corner mask) -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1B5E20"/>
+      <stop offset="0.55" stop-color="#2E7D32"/>
+      <stop offset="1" stop-color="#66BB6A"/>
+    </linearGradient>
+    <mask id="cuts" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="260">
+      <rect x="-20" y="-20" width="240" height="260" fill="white"/>
+      <g fill="black">
+        <path d="M84,50 Q60,25 40,0 L16,20 Q55,38 84,50Z"/>
+        <path d="M80,88 Q40,60 -6,46 L-9,70 Q40,78 80,88Z"/>
+        <path d="M80,125 Q40,106 -9,106 L-6,132 Q40,128 80,125Z"/>
+        <path d="M85,158 Q40,152 -4,160 L14,188 Q50,168 85,158Z"/>
+        <path d="M116,50 Q140,25 160,0 L184,20 Q145,38 116,50Z"/>
+        <path d="M120,88 Q160,60 206,46 L209,70 Q160,78 120,88Z"/>
+        <path d="M120,125 Q160,106 209,106 L206,132 Q160,128 120,125Z"/>
+        <path d="M115,158 Q160,152 204,160 L186,188 Q150,168 115,158Z"/>
+        <ellipse cx="91" cy="70" rx="3.2" ry="7" transform="rotate(-20 91 70)"/>
+        <ellipse cx="110" cy="69" rx="3.2" ry="7" transform="rotate(20 110 69)"/>
+        <ellipse cx="89" cy="107" rx="3.5" ry="7.5" transform="rotate(-8 89 107)"/>
+        <ellipse cx="111" cy="108" rx="3.5" ry="7.5" transform="rotate(8 111 108)"/>
+        <ellipse cx="91" cy="142" rx="3" ry="6" transform="rotate(10 91 142)"/>
+        <ellipse cx="109" cy="142" rx="3" ry="6" transform="rotate(-10 109 142)"/>
+      </g>
+      <path d="M100,170 Q96,90 100,10" stroke="black" stroke-width="2.2" fill="none" opacity="0.5"/>
+    </mask>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <!-- Leaf scale: 1.75 here; icon-maskable.svg uses 1.35 for the Android safe-zone padding -->
+  <g transform="translate(256 262) scale(1.35) rotate(-12) translate(-100 -112)" fill="white">
+    <path mask="url(#cuts)" d="M100,4 C130,14 186,38 195,88 C202,132 184,176 146,192 C126,200 107,191 100,170 C93,191 74,200 54,192 C16,176 -2,132 5,88 C14,38 70,14 100,4 Z"/>
+    <path d="M100,170 Q104,200 95,226" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>

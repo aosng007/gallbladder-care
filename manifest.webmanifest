@@ -1,0 +1,16 @@
+{
+  "name": "胆囊切除术后低脂养护指南",
+  "short_name": "草木养护",
+  "description": "低脂中西餐搭配 · 适度运动 · 日常护理",
+  "lang": "zh-CN",
+  "start_url": "/#today",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F4F8F3",
+  "theme_color": "#2E7D32",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
