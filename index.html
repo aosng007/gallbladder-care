@@ -1031,7 +1031,7 @@
                         <button class="btn btn-ghost" id="bmiReset" type="button">↺ 清空重填</button>
                     </div>
 
-                    <div class="bmi-result" id="bmiResult">
+                    <div class="bmi-result" id="bmiResult" aria-live="polite">
                         <div class="combo-count">你的 BMI</div>
                         <div class="bmi-value" id="bmiValue">--</div>
                         <div class="bmi-level" id="bmiLevel">请输入身高和体重</div>
@@ -1335,7 +1335,8 @@
                 return;
             }
 
-            const bmi = w / (h * h);
+            // Classify on the rounded value so the badge always matches the displayed number
+            const bmi = Math.round(w / (h * h) * 10) / 10;
             const lvl = BMI_LEVELS.find(l => bmi < l.max);
             const low = 18.5 * h * h, high = 23.9 * h * h;
 
