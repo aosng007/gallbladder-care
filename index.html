@@ -3,328 +3,1128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>胆囊切除术后女士低脂养护食谱（中西餐结合）</title>
+    <title>胆囊切除术后女士低脂养护指南（饮食 · 运动 · 护理）</title>
     <style>
         :root {
-            --primary-color: #2E7D32;
+            --primary: #2E7D32;
+            --primary-dark: #1B5E20;
             --primary-light: #E8F5E9;
-            --secondary-color: #0288D1;
-            --text-color: #333333;
-            --bg-color: #F9FBF9;
-            --card-bg: #FFFFFF;
-            --border-radius: 12px;
-            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --accent: #FF8A65;
+            --cn: #D84343;
+            --cn-light: #FDECEA;
+            --us: #1E78D2;
+            --us-light: #E6F0FB;
+            --text: #2F3A33;
+            --muted: #6B7A70;
+            --bg: #F4F8F3;
+            --card: rgba(255, 255, 255, 0.86);
+            --radius: 18px;
+            --shadow: 0 10px 30px rgba(46, 125, 50, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 16px 40px rgba(46, 125, 50, 0.16), 0 4px 10px rgba(0, 0, 0, 0.05);
         }
+
+        * { box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", Roboto, Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 10% 0%, #E3F2E1 0, transparent 40%),
+                radial-gradient(circle at 90% 20%, #FFF1E6 0, transparent 35%),
+                var(--bg);
+            background-attachment: fixed;
             margin: 0;
-            padding: 0;
         }
 
+        /* ---------- Hero ---------- */
         header {
-            background: linear-gradient(135deg, #2E7D32, #43A047);
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 45%, #66BB6A 100%);
             color: white;
             text-align: center;
-            padding: 2.5rem 1rem;
+            padding: 3.5rem 1rem 4.5rem;
+        }
+
+        header .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(2px);
+            opacity: 0.18;
+            background: white;
+            animation: float 12s ease-in-out infinite;
+        }
+        header .blob.b1 { width: 220px; height: 220px; top: -60px; left: -40px; }
+        header .blob.b2 { width: 140px; height: 140px; bottom: -30px; right: 8%; animation-delay: -4s; }
+        header .blob.b3 { width: 80px; height: 80px; top: 30%; right: 25%; animation-delay: -8s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-18px) scale(1.06); }
+        }
+
+        header .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(6px);
+            padding: 0.25rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
         }
 
         header h1 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.8rem;
+            position: relative;
+            margin: 0 0 0.6rem;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            letter-spacing: 0.04em;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
         }
 
         header p {
+            position: relative;
             margin: 0;
-            opacity: 0.9;
-            font-size: 1rem;
+            opacity: 0.92;
         }
 
+        header .wave {
+            position: absolute;
+            left: 0; right: 0; bottom: -1px;
+            width: 100%;
+            height: 50px;
+        }
+
+        /* ---------- Tabs ---------- */
+        nav.tabs {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            padding: 0.8rem 1rem;
+            background: rgba(244, 248, 243, 0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .tab-list {
+            display: flex;
+            gap: 0.35rem;
+            padding: 0.35rem;
+            background: white;
+            border-radius: 999px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            font: inherit;
+            font-size: 0.98rem;
+            color: var(--muted);
+            padding: 0.55rem 1.2rem;
+            border-radius: 999px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.25s ease;
+        }
+
+        .tab-btn:hover { color: var(--primary); background: var(--primary-light); }
+
+        .tab-btn.active {
+            color: white;
+            background: linear-gradient(135deg, #2E7D32, #43A047);
+            box-shadow: 0 4px 14px rgba(46, 125, 50, 0.35);
+        }
+
+        /* ---------- Layout ---------- */
         .container {
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
-            padding: 1.5rem 1rem;
+            padding: 1.2rem 1rem 2rem;
+        }
+
+        .panel { display: none; }
+        .panel.active { display: block; animation: fadeUp 0.45s ease both; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: var(--radius);
+            padding: 1.6rem;
             margin-bottom: 1.5rem;
             box-shadow: var(--shadow);
         }
 
         h2 {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 0.5rem;
-            margin-top: 0;
-            font-size: 1.3rem;
-        }
-
-        .principles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .principle-item {
-            background: var(--primary-light);
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .principle-item h3 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1rem;
-            color: var(--primary-color);
-        }
-
-        .principle-item p {
-            margin: 0;
-            font-size: 0.9rem;
-        }
-
-        .meal-section {
-            margin-bottom: 2rem;
-        }
-
-        .meal-header {
             display: flex;
             align-items: center;
-            background: #F1F8E9;
-            padding: 0.6rem 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
+            gap: 0.5rem;
+            color: var(--primary-dark);
+            margin: 0 0 1rem;
+            font-size: 1.35rem;
         }
 
-        .meal-title {
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: var(--primary-color);
+        h2::after {
+            content: "";
+            flex: 1;
+            height: 2px;
+            margin-left: 0.6rem;
+            background: linear-gradient(90deg, var(--primary-light), transparent);
         }
 
-        .meal-grid {
+        h3 { margin: 0 0 0.5rem; font-size: 1.05rem; color: var(--primary); }
+
+        ul { margin: 0; padding-left: 1.2rem; }
+        li { margin-bottom: 0.4rem; font-size: 0.95rem; }
+
+        .lead { color: var(--muted); margin: -0.4rem 0 1.2rem; }
+
+        /* ---------- Principles ---------- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1rem;
+        }
+
+        .tile {
+            position: relative;
+            background: linear-gradient(160deg, #FFFFFF, var(--primary-light));
+            padding: 1.2rem;
+            border-radius: 14px;
+            border: 1px solid #DCEDDA;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+
+        .tile .icon {
+            width: 44px; height: 44px;
+            display: grid; place-items: center;
+            font-size: 1.4rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(46, 125, 50, 0.12);
+            margin-bottom: 0.7rem;
+        }
+
+        .tile p { margin: 0; font-size: 0.9rem; }
+
+        .food-lists {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
 
-        @media (max-width: 600px) {
-            .meal-grid {
-                grid-template-columns: 1fr;
-            }
+        .food-box { border-radius: 14px; padding: 1rem 1.2rem; }
+        .food-box.ok { background: #EEF8EC; border: 1px solid #CDE7C9; }
+        .food-box.no { background: #FFF2EC; border: 1px solid #F8D3C2; }
+        .food-box h3 { margin-bottom: 0.6rem; }
+        .food-box.no h3 { color: #C2410C; }
+
+        .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .chip {
+            background: white;
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(0, 0, 0, 0.06);
         }
 
-        .option-box {
-            background: #FAFAFA;
-            border: 1px solid #EEEEEE;
-            border-radius: 8px;
-            padding: 1rem;
+        /* ---------- Recipe builder ---------- */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
         }
 
-        .option-box.chinese {
-            border-top: 3px solid #E53935;
+        .segmented {
+            display: inline-flex;
+            background: #EEF3EE;
+            border-radius: 999px;
+            padding: 0.25rem;
         }
 
-        .option-box.western {
-            border-top: 3px solid #1E88E5;
+        .segmented button {
+            border: none;
+            background: transparent;
+            font: inherit;
+            font-size: 0.9rem;
+            padding: 0.4rem 0.95rem;
+            border-radius: 999px;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all 0.2s ease;
         }
 
-        .option-title {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+        .segmented button.active { background: white; color: var(--primary-dark); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); font-weight: 600; }
+
+        .btn {
+            border: none;
+            font: inherit;
+            cursor: pointer;
+            border-radius: 999px;
+            padding: 0.55rem 1.2rem;
+            font-size: 0.95rem;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .btn:active { transform: scale(0.96); }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(135deg, #FF8A65, #FF7043);
+            box-shadow: 0 6px 16px rgba(255, 112, 67, 0.35);
+        }
+
+        .btn-primary:hover { box-shadow: 0 8px 22px rgba(255, 112, 67, 0.45); }
+
+        .btn-ghost { background: white; color: var(--primary-dark); border: 1px solid #CFE3CD; }
+        .btn-ghost:hover { background: var(--primary-light); }
+
+        .combo-count {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .combo-count strong { color: var(--accent); font-size: 1.05rem; }
+
+        .meal {
+            border-radius: 16px;
+            border: 1px solid #E3ECE2;
+            background: white;
+            margin-bottom: 1.1rem;
+            overflow: hidden;
+        }
+
+        .meal-head {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: space-between;
+            padding: 0.7rem 1rem;
+            background: linear-gradient(90deg, #F1F8E9, #FFFFFF);
+            border-bottom: 1px solid #EEF3EE;
         }
 
-        .option-title.cn { color: #C62828; }
-        .option-title.us { color: #1565C0; }
+        .meal-head .title { font-weight: 700; color: var(--primary-dark); font-size: 1.05rem; }
+        .meal-head .sub { font-size: 0.8rem; color: var(--muted); margin-left: 0.4rem; font-weight: normal; }
 
-        ul {
-            margin: 0;
-            padding-left: 1.2rem;
+        .icon-btn {
+            border: none;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 999px;
+            padding: 0.25rem 0.75rem;
+            font: inherit;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
         }
 
-        li {
-            margin-bottom: 0.4rem;
-            font-size: 0.95rem;
-        }
+        .icon-btn:hover { background: #D5EBD2; }
 
-        .tips-list li {
-            margin-bottom: 0.6rem;
-        }
-
-        .warning-box {
-            background: #FFF3E0;
-            border-left: 4px solid #FB8C00;
+        .slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 0.8rem;
             padding: 1rem;
-            border-radius: 8px;
+        }
+
+        .slot {
+            position: relative;
+            border-radius: 12px;
+            padding: 0.75rem 0.9rem 0.8rem;
+            background: #FAFCFA;
+            border: 1px dashed #D7E6D5;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .slot:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06); }
+
+        .slot .label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slot .dish {
+            font-weight: 600;
+            font-size: 0.98rem;
+            margin-top: 0.25rem;
+            min-height: 1.6em;
+        }
+
+        .slot .dish.flip { animation: flip 0.45s ease; }
+
+        @keyframes flip {
+            0% { opacity: 0; transform: rotateX(90deg); }
+            100% { opacity: 1; transform: rotateX(0); }
+        }
+
+        .slot .reroll {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            padding: 0;
+            transition: transform 0.4s ease;
+        }
+
+        .slot .reroll:hover { transform: rotate(180deg); }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 0.05rem 0.45rem;
+            border-radius: 6px;
+            margin-left: 0.3rem;
+            vertical-align: middle;
+            font-weight: 500;
+        }
+
+        .tag.cn { background: var(--cn-light); color: var(--cn); }
+        .tag.us { background: var(--us-light); color: var(--us); }
+
+        .slot.cn { border-left: 3px solid var(--cn); border-style: dashed dashed dashed solid; }
+        .slot.us { border-left: 3px solid var(--us); border-style: dashed dashed dashed solid; }
+
+        /* Week plan */
+        .week {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 0.9rem;
             margin-top: 1rem;
         }
 
+        .day {
+            background: white;
+            border: 1px solid #E3ECE2;
+            border-radius: 14px;
+            padding: 0.9rem 1rem;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        .day h4 {
+            margin: 0 0 0.5rem;
+            color: var(--primary-dark);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .day h4 span { font-size: 0.78rem; color: var(--muted); font-weight: normal; }
+        .day dl { margin: 0; font-size: 0.86rem; }
+        .day dt { font-weight: 600; color: var(--primary); margin-top: 0.35rem; }
+        .day dd { margin: 0; color: var(--text); }
+
+        details.classic {
+            margin-top: 1rem;
+            border-radius: 14px;
+            background: #FBFDFB;
+            border: 1px solid #E3ECE2;
+            padding: 0.8rem 1rem;
+        }
+
+        details.classic summary { cursor: pointer; font-weight: 600; color: var(--primary-dark); }
+
+        .classic-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .classic-grid .box { border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.9rem; }
+        .classic-grid .box.cn { background: var(--cn-light); }
+        .classic-grid .box.us { background: var(--us-light); }
+        .classic-grid .box h4 { margin: 0 0 0.3rem; }
+        .classic-grid .box.cn h4 { color: var(--cn); }
+        .classic-grid .box.us h4 { color: var(--us); }
+        .classic-grid .box p { margin: 0 0 0.4rem; }
+
+        /* ---------- Exercise ---------- */
+        .hero-note {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: 1.1rem 1.2rem;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #E8F5E9, #FFF8E1);
+            margin-bottom: 1.2rem;
+        }
+
+        .hero-note .big { font-size: 2rem; line-height: 1; }
+        .hero-note p { margin: 0; }
+
+        .ex-card {
+            border-radius: 16px;
+            padding: 1.2rem 1.3rem;
+            margin-bottom: 1rem;
+            background: white;
+            border: 1px solid #E3ECE2;
+            transition: box-shadow 0.25s ease;
+        }
+
+        .ex-card:hover { box-shadow: var(--shadow-hover); }
+
+        .ex-card .row {
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 0.6rem;
+            margin-top: 0.6rem;
+        }
+
+        .ex-card .row .k {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+            background: var(--primary);
+            border-radius: 8px;
+            text-align: center;
+            align-self: start;
+            padding: 0.2rem 0;
+        }
+
+        .ex-card .row .k.tip { background: var(--accent); }
+        .ex-card .row p { margin: 0; font-size: 0.93rem; }
+
+        .ex-types { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.4rem; }
+
+        .ex-type {
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 0.88rem;
+        }
+
+        .timeline { position: relative; margin: 0.5rem 0 0; padding-left: 1.6rem; }
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 0.45rem; top: 0.3rem; bottom: 0.3rem;
+            width: 3px;
+            border-radius: 3px;
+            background: linear-gradient(#A5D6A7, #FFAB91);
+        }
+
+        .step { position: relative; margin-bottom: 1rem; }
+        .step::before {
+            content: "";
+            position: absolute;
+            left: -1.45rem; top: 0.35rem;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--primary);
+        }
+
+        .step .when { font-weight: 700; color: var(--primary-dark); }
+        .step p { margin: 0.1rem 0 0; font-size: 0.92rem; }
+
+        .breath-wrap {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 1.4rem;
+            align-items: center;
+        }
+
+        .breath-stage {
+            position: relative;
+            width: 200px; height: 200px;
+            margin: 0 auto;
+            display: grid;
+            place-items: center;
+        }
+
+        .breath-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(102, 187, 106, 0.35), rgba(102, 187, 106, 0.05) 70%);
+            border: 2px solid rgba(46, 125, 50, 0.25);
+        }
+
+        .breath-circle {
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.05rem;
+            background: linear-gradient(135deg, #43A047, #81C784);
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.35);
+            transform: scale(0.8);
+            transition-property: transform;
+            transition-timing-function: ease-in-out;
+        }
+
+        .breath-count { font-size: 0.85rem; color: var(--muted); margin-top: 0.6rem; text-align: center; }
+
+        .avoid-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .avoid {
+            background: #FFF4EF;
+            border: 1px solid #FAD7C7;
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .avoid strong { color: #C2410C; display: block; margin-bottom: 0.2rem; }
+
+        /* ---------- Care ---------- */
+        .tips {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .tips li {
+            display: flex;
+            gap: 0.8rem;
+            align-items: flex-start;
+            background: white;
+            border: 1px solid #E3ECE2;
+            border-radius: 14px;
+            padding: 0.9rem 1rem;
+            margin: 0;
+        }
+
+        .tips li .em { font-size: 1.4rem; line-height: 1.2; }
+
+        .warning-box {
+            display: flex;
+            gap: 0.8rem;
+            background: linear-gradient(135deg, #FFF3E0, #FFE9DD);
+            border-left: 5px solid #FB8C00;
+            padding: 1rem 1.2rem;
+            border-radius: 14px;
+            margin-top: 1.2rem;
+        }
+
+        .warning-box .em { font-size: 1.6rem; }
+
         footer {
             text-align: center;
-            padding: 1.5rem;
+            padding: 1.5rem 1rem 2.5rem;
             font-size: 0.85rem;
-            color: #777;
+            color: var(--muted);
+        }
+
+        @media (max-width: 640px) {
+            .food-lists, .classic-grid, .breath-wrap { grid-template-columns: 1fr; }
+            .ex-card .row { grid-template-columns: 1fr; }
+            .ex-card .row .k { justify-self: start; padding: 0.15rem 0.7rem; }
+            .card { padding: 1.2rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+        }
+
+        @media print {
+            nav.tabs, .toolbar, .icon-btn, .reroll, header .blob { display: none !important; }
+            .panel { display: block !important; }
+            body { background: white; }
+            .card { box-shadow: none; border: 1px solid #ddd; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>胆囊切除术后女士低脂养护食谱</h1>
-        <p>专为恢复期及胆道养护设计的低脂中西餐膳食指南</p>
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
+        <div class="badge">🌿 术后康复 · 胆道养护</div>
+        <h1>胆囊切除术后女士低脂养护指南</h1>
+        <p>低脂中西餐搭配 · 适度运动 · 日常护理，一页搞定</p>
+        <svg class="wave" viewBox="0 0 1440 50" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0,25 C240,55 480,0 720,20 C960,40 1200,5 1440,25 L1440,50 L0,50 Z" fill="#F4F8F3"/>
+        </svg>
     </header>
 
-    <div class="container">
-
-        <!-- 核心原则 -->
-        <div class="card">
-            <h2>💡 核心饮食原则</h2>
-            <div class="principles-grid">
-                <div class="principle-item">
-                    <h3>1. 低脂清淡</h3>
-                    <p>每餐用油控制在 5-10g，避免油炸、重油爆炒，减少胆道负担。</p>
-                </div>
-                <div class="principle-item">
-                    <h3>2. 少食多餐</h3>
-                    <p>建议一日 3 正餐 + 1-2 次轻度加餐，帮助胆汁均匀排空。</p>
-                </div>
-                <div class="principle-item">
-                    <h3>3. 优质蛋白</h3>
-                    <p>优先选择蒸/煮鸡胸肉、深海白肉鱼、虾仁、蛋清及豆腐。</p>
-                </div>
-                <div class="principle-item">
-                    <h3>4. 可溶性高纤</h3>
-                    <p>多吃燕麦、山药、南瓜及新鲜蔬菜，吸附多余胆汁酸。</p>
-                </div>
-            </div>
+    <nav class="tabs">
+        <div class="tab-list" role="tablist">
+            <button class="tab-btn active" role="tab" data-tab="principles">💡 饮食原则</button>
+            <button class="tab-btn" role="tab" data-tab="recipes">🍽️ 食谱搭配</button>
+            <button class="tab-btn" role="tab" data-tab="exercise">🏃‍♀️ 运动</button>
+            <button class="tab-btn" role="tab" data-tab="care">💗 护理</button>
         </div>
+    </nav>
 
-        <!-- 每日食谱 -->
-        <div class="card">
-            <h2>🍽️ 每日中西餐搭配食谱</h2>
+    <main class="container">
 
-            <!-- 早餐 -->
-            <div class="meal-section">
-                <div class="meal-header">
-                    <span class="meal-title">🌅 早餐 (Breakfast)</span>
-                </div>
-                <div class="meal-grid">
-                    <div class="option-box chinese">
-                        <div class="option-title cn">🥢 中式方案</div>
-                        <ul>
-                            <li>山药大枣小米粥</li>
-                            <li>蒸蛋白 / 水煮蛋（去黄）</li>
-                            <li>蒸小馒头 / 花卷</li>
-                            <li>凉拌少油丝瓜 / 木耳</li>
-                        </ul>
+        <!-- ================= 饮食原则 ================= -->
+        <section class="panel active" id="principles" role="tabpanel">
+            <div class="card">
+                <h2>💡 核心饮食原则</h2>
+                <div class="grid">
+                    <div class="tile">
+                        <div class="icon">🫒</div>
+                        <h3>1. 低脂清淡</h3>
+                        <p>每餐用油控制在 5-10g，避免油炸、重油爆炒，减少胆道负担。</p>
                     </div>
-                    <div class="option-box western">
-                        <div class="option-title us">🍽️ 西式方案</div>
-                        <ul>
-                            <li>燕麦脱脂牛奶粥（配蓝莓/香蕉）</li>
-                            <li>全麦吐司（不抹黄油）</li>
-                            <li>蒸鸡胸肉薄片</li>
-                        </ul>
+                    <div class="tile">
+                        <div class="icon">⏰</div>
+                        <h3>2. 少食多餐</h3>
+                        <p>建议一日 3 正餐 + 1-2 次轻度加餐，帮助胆汁均匀排空。</p>
                     </div>
-                </div>
-            </div>
-
-            <!-- 午餐 -->
-            <div class="meal-section">
-                <div class="meal-header">
-                    <span class="meal-title">☀️ 午餐 (Lunch)</span>
-                </div>
-                <div class="meal-grid">
-                    <div class="option-box chinese">
-                        <div class="option-title cn">🥢 中式方案</div>
-                        <ul>
-                            <li>清蒸黄花鱼 / 鲈鱼</li>
-                            <li>蒸南瓜山药</li>
-                            <li>蒜蓉清蒸西兰花（微油）</li>
-                            <li>紫菜蛋花汤 + 杂粮饭</li>
-                        </ul>
+                    <div class="tile">
+                        <div class="icon">🐟</div>
+                        <h3>3. 优质蛋白</h3>
+                        <p>优先选择蒸/煮鸡胸肉、深海白肉鱼、虾仁、蛋清及豆腐。</p>
                     </div>
-                    <div class="option-box western">
-                        <div class="option-title us">🍽️ 西式方案</div>
-                        <ul>
-                            <li>香草清蒸 / 煎鸡胸肉（极少橄榄油）</li>
-                            <li>烤甜椒生菜沙拉（无油油醋汁/低脂酸奶酱）</li>
-                            <li>藜麦红薯饭 / 蒸烤马铃薯</li>
-                        </ul>
+                    <div class="tile">
+                        <div class="icon">🥣</div>
+                        <h3>4. 可溶性高纤</h3>
+                        <p>多吃燕麦、山药、南瓜及新鲜蔬菜，吸附多余胆汁酸。</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 晚餐 -->
-            <div class="meal-section">
-                <div class="meal-header">
-                    <span class="meal-title">🌙 晚餐 (Dinner)</span>
-                </div>
-                <div class="meal-grid">
-                    <div class="option-box chinese">
-                        <div class="option-title cn">🥢 中式方案</div>
-                        <ul>
-                            <li>豆腐虾仁青菜汤饭 或 鲜虾冬瓜豆腐煲</li>
-                            <li>清蒸丝瓜</li>
-                            <li>少量紫米饭</li>
-                        </ul>
+            <div class="card">
+                <h2>🛒 食材红绿灯</h2>
+                <div class="food-lists">
+                    <div class="food-box ok">
+                        <h3>✅ 推荐常吃</h3>
+                        <div class="chips">
+                            <span class="chip">鸡胸肉</span><span class="chip">鲈鱼 / 鳕鱼</span><span class="chip">虾仁</span>
+                            <span class="chip">蛋清</span><span class="chip">豆腐</span><span class="chip">燕麦</span>
+                            <span class="chip">小米</span><span class="chip">山药</span><span class="chip">南瓜</span>
+                            <span class="chip">冬瓜</span><span class="chip">西兰花</span><span class="chip">脱脂奶</span>
+                            <span class="chip">蓝莓</span><span class="chip">苹果</span>
+                        </div>
                     </div>
-                    <div class="option-box western">
-                        <div class="option-title us">🍽️ 西式方案</div>
-                        <ul>
-                            <li>清蒸三文鱼 / 狭鳕鱼排（柠檬汁调味）</li>
-                            <li>蒸水煮西兰花与胡萝卜</li>
-                            <li>烤小土豆块</li>
-                        </ul>
+                    <div class="food-box no">
+                        <h3>⛔ 尽量避免</h3>
+                        <div class="chips">
+                            <span class="chip">油炸食品</span><span class="chip">肥肉 / 五花肉</span><span class="chip">动物内脏</span>
+                            <span class="chip">蛋黄（多量）</span><span class="chip">奶油 / 黄油</span><span class="chip">浓汤火锅</span>
+                            <span class="chip">烧烤</span><span class="chip">酒精</span><span class="chip">辛辣刺激</span>
+                            <span class="chip">坚果（大量）</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 食谱搭配 ================= -->
+        <section class="panel" id="recipes" role="tabpanel">
+            <div class="card">
+                <h2>🎲 每日中西餐自由搭配</h2>
+                <p class="lead">每一餐都拆成「主食 / 蛋白 / 蔬菜 / 汤」几个格子，可以一键随机组合，也可以单独换某一道菜。</p>
+
+                <div class="toolbar">
+                    <div class="segmented" id="styleFilter">
+                        <button class="active" data-style="all">🌏 中西混搭</button>
+                        <button data-style="cn">🥢 只看中式</button>
+                        <button data-style="us">🍴 只看西式</button>
+                    </div>
+                    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                        <button class="btn btn-primary" id="shuffleAll">🎲 一键生成今日菜单</button>
+                        <button class="btn btn-ghost" id="makeWeek">📅 生成一周菜单</button>
+                    </div>
+                </div>
+                <div class="combo-count" id="comboCount"></div>
+
+                <div id="meals" style="margin-top:1rem;"></div>
+
+                <div id="weekWrap" hidden>
+                    <h2 style="margin-top:1.5rem;">📅 一周菜单（尽量不重样）</h2>
+                    <div class="week" id="week"></div>
+                </div>
+
+                <details class="classic">
+                    <summary>📖 查看经典示范搭配</summary>
+                    <div class="classic-grid">
+                        <div class="box cn">
+                            <h4>🥢 中式一日</h4>
+                            <p><b>早：</b>山药大枣小米粥、蒸蛋白、蒸小馒头、凉拌少油丝瓜 / 木耳</p>
+                            <p><b>午：</b>清蒸黄花鱼、蒸南瓜山药、蒜蓉西兰花（微油）、紫菜蛋花汤 + 杂粮饭</p>
+                            <p><b>晚：</b>鲜虾冬瓜豆腐煲、清蒸丝瓜、少量紫米饭</p>
+                        </div>
+                        <div class="box us">
+                            <h4>🍴 西式一日</h4>
+                            <p><b>早：</b>燕麦脱脂牛奶粥（配蓝莓/香蕉）、全麦吐司（不抹黄油）、蒸鸡胸肉薄片</p>
+                            <p><b>午：</b>香草清蒸鸡胸肉、烤甜椒生菜沙拉（无油油醋汁）、藜麦红薯饭</p>
+                            <p><b>晚：</b>柠檬狭鳕鱼排、蒸西兰花与胡萝卜、烤小土豆块</p>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- ================= 运动 ================= -->
+        <section class="panel" id="exercise" role="tabpanel">
+            <div class="card">
+                <h2>🏃‍♀️ 适度锻炼：对缓解功能性不适有帮助</h2>
+                <div class="hero-note">
+                    <div class="big">🌱</div>
+                    <p>适当的运动不仅能<strong>改善整体新陈代谢</strong>，还能<strong>调节胃肠道和植物神经功能</strong>。关键是「温和、规律、循序渐进」。</p>
+                </div>
+
+                <div class="ex-card">
+                    <h3>🚶‍♀️ 有氧运动</h3>
+                    <div class="ex-types">
+                        <span class="ex-type">🚶 散步</span>
+                        <span class="ex-type">🏃 慢跑</span>
+                        <span class="ex-type">🧘 瑜伽</span>
+                        <span class="ex-type">☯️ 太极</span>
+                    </div>
+                    <div class="row">
+                        <span class="k">原理</span>
+                        <p>温和的有氧运动可以促进胃肠道的蠕动，增强腹肌力量，改善内脏血液循环，对于缓解因胃肠动力不足、腹胀或轻度括约肌功能紊乱引起的隐痛有积极作用。</p>
+                    </div>
+                    <div class="row">
+                        <span class="k tip">建议</span>
+                        <p>术后伤口完全愈合、身体恢复后，每天可以进行 <strong>30 分钟左右</strong>的轻松散步或慢走，不要一开始就做剧烈的高强度核心训练（如仰卧起坐等过度压迫腹部的运动）。</p>
+                    </div>
+                </div>
+
+                <div class="ex-card">
+                    <h3>🌬️ 腹式呼吸训练</h3>
+                    <div class="breath-wrap">
+                        <div>
+                            <div class="breath-stage">
+                                <div class="breath-ring"></div>
+                                <div class="breath-circle" id="breathCircle">准备</div>
+                            </div>
+                            <div class="breath-count" id="breathCount">吸气 4 秒 · 呼气 6 秒</div>
+                            <div style="text-align:center; margin-top:0.6rem;">
+                                <button class="btn btn-ghost" id="breathBtn">▶ 跟着练习</button>
+                            </div>
+                        </div>
+                        <div>
+                            <p style="margin-top:0;">每天进行深沉的腹式呼吸（<strong>吸气时肚子鼓起，呼气时肚子收缩</strong>），可以轻柔地按摩腹腔脏器，放松植物神经，对缓解紧张导致的 <strong>Oddi 括约肌痉挛</strong>有一定的帮助。</p>
+                            <ul>
+                                <li>平躺或端坐，一手放胸口、一手放肚子上</li>
+                                <li>用鼻子慢慢吸气约 4 秒，感觉腹部的手被顶起，胸口尽量不动</li>
+                                <li>用嘴缓慢呼气约 6 秒，腹部自然回收</li>
+                                <li>每次 5-10 分钟，早晚各一次；睡前练习还有助于入睡</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 加餐 -->
-            <div class="meal-section">
-                <div class="meal-header">
-                    <span class="meal-title">🍓 建议加餐 (Snacks)</span>
+            <div class="card">
+                <h2>📈 循序渐进的运动节奏</h2>
+                <div class="timeline">
+                    <div class="step">
+                        <div class="when">术后早期（出院后 1-2 周）</div>
+                        <p>室内或小区内慢走，每次 5-10 分钟、每天数次；配合腹式呼吸。以不牵拉伤口、不疲劳为准。</p>
+                    </div>
+                    <div class="step">
+                        <div class="when">恢复期（约 2-4 周）</div>
+                        <p>逐步延长到每次 20-30 分钟的轻松散步；可加入简单拉伸、坐姿太极动作。</p>
+                    </div>
+                    <div class="step">
+                        <div class="when">伤口完全愈合后（约 4-6 周起，经医生评估）</div>
+                        <p>可尝试慢跑、游泳、温和瑜伽、八段锦等；每周 150 分钟中等强度活动为目标。</p>
+                    </div>
+                    <div class="step">
+                        <div class="when">长期保持</div>
+                        <p>在无不适的前提下，再缓慢加入轻量核心与力量训练；运动前后注意补水。</p>
+                    </div>
                 </div>
-                <div class="option-box" style="border-top: 3px solid #4CAF50;">
-                    <ul>
-                        <li>无糖 / 低脂酸奶（100-150ml）</li>
-                        <li>1 小把蓝莓 或 蒸熟苹果片</li>
-                    </ul>
-                </div>
+                <p class="combo-count" style="margin-top:0.4rem;">* 以上时间仅供参考，腹腔镜与开腹手术恢复差异较大，具体请遵医嘱。</p>
             </div>
 
-        </div>
-
-        <!-- 术后护理与生活建议 -->
-        <div class="card">
-            <h2>🏃‍♀️ 术后护理与生活建议</h2>
-            <ul class="tips-list">
-                <li><strong>餐后活动：</strong>进餐后建议顺时针轻柔按摩腹部 5-10 分钟，或进行 15-20 分钟的慢速散步，促进胃肠蠕动。</li>
-                <li><strong>充足饮水：</strong>保证每日饮水量在 <strong>1500 - 2000 毫升</strong>，帮助稀释胆汁。</li>
-                <li><strong>循序渐进：</strong>若某种食物引起腹泻或不适，暂停食用 1-2 周后再试。</li>
-            </ul>
-
-            <div class="warning-box">
-                <strong>⚠️ 医生特别提醒：</strong><br>
-                如出现右上腹剧烈疼痛、持续性恶心呕吐、发热或皮肤/眼睛发黄（黄疸）等症状，请务必及时前往医院急诊就诊。
+            <div class="card">
+                <h2>🚫 运动注意事项</h2>
+                <div class="avoid-grid">
+                    <div class="avoid"><strong>避免过早压迫腹部</strong>仰卧起坐、卷腹、平板支撑等，至少等伤口完全愈合并经医生同意。</div>
+                    <div class="avoid"><strong>避免提举重物</strong>术后早期不要提超过 5kg 的物品，防止切口疝。</div>
+                    <div class="avoid"><strong>饭后别马上剧烈运动</strong>餐后 30-60 分钟再进行慢跑等运动，饭后宜慢走。</div>
+                    <div class="avoid"><strong>出现不适立即停止</strong>运动中若右上腹痛、头晕、心慌，应停止休息，必要时就医。</div>
+                </div>
             </div>
-        </div>
+        </section>
 
-    </div>
+        <!-- ================= 护理 ================= -->
+        <section class="panel" id="care" role="tabpanel">
+            <div class="card">
+                <h2>💗 术后护理与生活建议</h2>
+                <ul class="tips">
+                    <li><span class="em">🤲</span><div><strong>餐后活动：</strong>进餐后建议顺时针轻柔按摩腹部 5-10 分钟，或进行 15-20 分钟的慢速散步，促进胃肠蠕动。</div></li>
+                    <li><span class="em">💧</span><div><strong>充足饮水：</strong>保证每日饮水量在 <strong>1500 - 2000 毫升</strong>，帮助稀释胆汁。</div></li>
+                    <li><span class="em">🐢</span><div><strong>循序渐进：</strong>若某种食物引起腹泻或不适，暂停食用 1-2 周后再试。</div></li>
+                    <li><span class="em">📝</span><div><strong>饮食日记：</strong>简单记录每餐内容和身体感受，方便找出不耐受的食物，复诊时也可给医生参考。</div></li>
+                    <li><span class="em">😴</span><div><strong>规律作息：</strong>按时三餐、不熬夜，保持情绪放松，有助于植物神经与胃肠功能稳定。</div></li>
+                </ul>
+
+                <div class="warning-box">
+                    <span class="em">⚠️</span>
+                    <div>
+                        <strong>医生特别提醒：</strong><br>
+                        如出现右上腹剧烈疼痛、持续性恶心呕吐、发热或皮肤/眼睛发黄（黄疸）等症状，请务必及时前往医院急诊就诊。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
 
     <footer>
-        <p>本食谱为术后膳食参考，具体个人营养需求请遵医嘱。</p>
+        <p>本指南为术后膳食与生活参考，具体个人营养及运动需求请遵医嘱。</p>
     </footer>
+
+    <script>
+        // ---------- Tabs ----------
+        const tabs = document.querySelectorAll('.tab-btn');
+        function showTab(id) {
+            if (!document.getElementById(id)) id = 'principles';
+            tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === id));
+            document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+        }
+        tabs.forEach(t => t.addEventListener('click', () => {
+            history.replaceState(null, '', '#' + t.dataset.tab);
+            showTab(t.dataset.tab);
+        }));
+        showTab(location.hash.slice(1));
+
+        // ---------- Recipe data: [name, style] ----------
+        const MEALS = [
+            {
+                key: 'breakfast', title: '🌅 早餐', sub: 'Breakfast',
+                slots: {
+                    '主食': [
+                        ['山药大枣小米粥', 'cn'], ['南瓜小米粥', 'cn'], ['蒸小馒头 / 花卷', 'cn'], ['蒸红薯玉米', 'cn'], ['燕麦白粥', 'cn'],
+                        ['燕麦脱脂牛奶粥', 'us'], ['全麦吐司（不抹黄油）', 'us'], ['低脂酸奶燕麦杯', 'us'], ['全麦贝果（半个）', 'us']
+                    ],
+                    '蛋白': [
+                        ['蒸蛋白羹', 'cn'], ['水煮蛋（去黄）', 'cn'], ['无糖豆浆', 'cn'], ['嫩豆腐脑（少卤）', 'cn'],
+                        ['蒸鸡胸肉薄片', 'us'], ['蛋白菠菜饼（不粘锅）', 'us'], ['脱脂牛奶', 'us'], ['低脂茅屋奶酪', 'us']
+                    ],
+                    '蔬果': [
+                        ['凉拌少油丝瓜 / 木耳', 'cn'], ['焯拌菠菜', 'cn'], ['清炒小白菜（微油）', 'cn'],
+                        ['蓝莓 / 草莓一小碗', 'us'], ['香蕉半根', 'us'], ['蒸苹果片', 'us'], ['番茄黄瓜片', 'us']
+                    ]
+                }
+            },
+            {
+                key: 'lunch', title: '☀️ 午餐', sub: 'Lunch',
+                slots: {
+                    '主食': [
+                        ['杂粮饭', 'cn'], ['小米饭', 'cn'], ['荞麦面（清汤）', 'cn'], ['蒸山药段', 'cn'],
+                        ['藜麦红薯饭', 'us'], ['蒸烤马铃薯', 'us'], ['全麦意面（番茄酱）', 'us'], ['全麦卷饼', 'us']
+                    ],
+                    '蛋白主菜': [
+                        ['清蒸黄花鱼 / 鲈鱼', 'cn'], ['白灼虾', 'cn'], ['番茄龙利鱼', 'cn'], ['瘦肉末蒸豆腐', 'cn'], ['手撕清蒸鸡胸', 'cn'],
+                        ['香草清蒸鸡胸肉', 'us'], ['柠檬烤鳕鱼', 'us'], ['烤火鸡胸片', 'us'], ['番茄炖白芸豆', 'us']
+                    ],
+                    '蔬菜': [
+                        ['蒜蓉清蒸西兰花（微油）', 'cn'], ['蒸南瓜山药', 'cn'], ['白灼生菜', 'cn'], ['清炒西葫芦（微油）', 'cn'],
+                        ['烤甜椒生菜沙拉（无油油醋汁）', 'us'], ['蒸胡萝卜四季豆', 'us'], ['烤芦笋（喷少许油）', 'us'], ['黄瓜番茄沙拉（低脂酸奶酱）', 'us']
+                    ],
+                    '汤': [
+                        ['紫菜蛋花汤', 'cn'], ['冬瓜海带汤', 'cn'], ['番茄豆腐汤', 'cn'], ['丝瓜蛋白汤', 'cn'],
+                        ['南瓜浓汤（不加奶油）', 'us'], ['蔬菜清汤', 'us'], ['番茄罗勒汤', 'us']
+                    ]
+                }
+            },
+            {
+                key: 'dinner', title: '🌙 晚餐', sub: 'Dinner · 宜清淡少量',
+                slots: {
+                    '主食': [
+                        ['少量紫米饭', 'cn'], ['小米粥', 'cn'], ['青菜汤饭', 'cn'], ['蒸芋头 / 山药', 'cn'],
+                        ['烤小土豆块', 'us'], ['红薯泥', 'us'], ['全麦面包一片', 'us']
+                    ],
+                    '蛋白主菜': [
+                        ['鲜虾冬瓜豆腐煲', 'cn'], ['豆腐虾仁', 'cn'], ['清蒸鳕鱼', 'cn'], ['鸡胸肉丸冬瓜汤', 'cn'], ['虾仁蒸蛋白', 'cn'],
+                        ['清蒸三文鱼（适应后少量）', 'us'], ['柠檬汁狭鳕鱼排', 'us'], ['烤鸡胸蔬菜串', 'us'], ['番茄烩白鱼', 'us']
+                    ],
+                    '蔬菜': [
+                        ['清蒸丝瓜', 'cn'], ['上汤菠菜（不加皮蛋）', 'cn'], ['蒜泥蒸茄子（少油）', 'cn'], ['白灼菜心', 'cn'],
+                        ['蒸西兰花与胡萝卜', 'us'], ['烤西葫芦片', 'us'], ['嫩菠菜沙拉', 'us']
+                    ]
+                }
+            },
+            {
+                key: 'snack', title: '🍓 加餐', sub: 'Snacks · 1-2 次',
+                slots: {
+                    '上午加餐': [
+                        ['无糖低脂酸奶（100-150ml）', 'us'], ['1 小把蓝莓', 'us'], ['猕猴桃 1 个', 'us'], ['苏打饼干 2-3 片', 'us'],
+                        ['蒸熟苹果片', 'cn'], ['木瓜一小块', 'cn'], ['藕粉一小碗', 'cn']
+                    ],
+                    '下午加餐': [
+                        ['脱脂牛奶 200ml', 'us'], ['香蕉半根', 'us'], ['低脂酸奶 + 燕麦', 'us'],
+                        ['雪梨一小个', 'cn'], ['无糖豆浆', 'cn'], ['蒸南瓜一小块', 'cn'], ['山药小米糊', 'cn']
+                    ]
+                }
+            }
+        ];
+
+        let style = 'all';
+        const current = {}; // meal.key -> { slotName: [name, style] }
+
+        const pool = list => style === 'all' ? list : list.filter(d => d[1] === style);
+        const pick = (list, avoid) => {
+            const opts = list.filter(d => !avoid || d[0] !== avoid[0]);
+            const from = opts.length ? opts : list;
+            return from[Math.floor(Math.random() * from.length)];
+        };
+        const tagHtml = s => `<span class="tag ${s}">${s === 'cn' ? '中' : '西'}</span>`;
+
+        function rollMeal(meal) {
+            current[meal.key] = {};
+            for (const [slot, list] of Object.entries(meal.slots)) {
+                current[meal.key][slot] = pick(pool(list));
+            }
+        }
+
+        function renderMeals() {
+            const wrap = document.getElementById('meals');
+            wrap.innerHTML = MEALS.map(meal => `
+                <div class="meal">
+                    <div class="meal-head">
+                        <span class="title">${meal.title}<span class="sub">${meal.sub}</span></span>
+                        <button class="icon-btn" data-meal="${meal.key}">🔀 换这一餐</button>
+                    </div>
+                    <div class="slots">
+                        ${Object.keys(meal.slots).map(slot => {
+                            const [name, s] = current[meal.key][slot];
+                            return `<div class="slot ${s}">
+                                <div class="label">${slot}<button class="reroll" title="换一道" data-meal="${meal.key}" data-slot="${slot}">🔄</button></div>
+                                <div class="dish" data-id="${meal.key}-${slot}">${name}${tagHtml(s)}</div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </div>`).join('');
+        }
+
+        function flip(selector) {
+            document.querySelectorAll(selector).forEach(el => {
+                el.classList.remove('flip');
+                void el.offsetWidth;
+                el.classList.add('flip');
+            });
+        }
+
+        function updateCount() {
+            let total = 1;
+            MEALS.forEach(m => Object.values(m.slots).forEach(l => total *= pool(l).length));
+            const dishes = new Set(MEALS.flatMap(m => Object.values(m.slots).flatMap(l => pool(l).map(d => d[0])))).size;
+            document.getElementById('comboCount').innerHTML =
+                `当前菜品库共 <strong>${dishes}</strong> 道菜，可组合出 <strong>${total.toLocaleString('zh-CN')}</strong> 种不同的一日菜单`;
+        }
+
+        function shuffleAll() {
+            MEALS.forEach(rollMeal);
+            renderMeals();
+            flip('.slot .dish');
+        }
+
+        document.getElementById('meals').addEventListener('click', e => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const meal = MEALS.find(m => m.key === btn.dataset.meal);
+            if (btn.dataset.slot) {
+                const slot = btn.dataset.slot;
+                current[meal.key][slot] = pick(pool(meal.slots[slot]), current[meal.key][slot]);
+                renderMeals();
+                flip(`.dish[data-id="${meal.key}-${slot}"]`);
+            } else {
+                rollMeal(meal);
+                renderMeals();
+                flip(`.dish[data-id^="${meal.key}-"]`);
+            }
+        });
+
+        document.querySelectorAll('#styleFilter button').forEach(b => b.addEventListener('click', () => {
+            document.querySelectorAll('#styleFilter button').forEach(x => x.classList.toggle('active', x === b));
+            style = b.dataset.style;
+            updateCount();
+            shuffleAll();
+            if (!document.getElementById('weekWrap').hidden) makeWeek();
+        }));
+
+        document.getElementById('shuffleAll').addEventListener('click', shuffleAll);
+
+        // Week plan: avoid repeating the same dish in a slot on consecutive days
+        function makeWeek() {
+            const days = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+            const prev = {};
+            const html = days.map((day, i) => {
+                const rows = MEALS.map(meal => {
+                    const items = Object.entries(meal.slots).map(([slot, list]) => {
+                        const k = meal.key + slot;
+                        const d = pick(pool(list), prev[k]);
+                        prev[k] = d;
+                        return d[0];
+                    });
+                    return `<dt>${meal.title}</dt><dd>${items.join(' · ')}</dd>`;
+                }).join('');
+                return `<div class="day" style="animation-delay:${i * 0.05}s"><h4>${day}<span>第 ${i + 1} 天</span></h4><dl>${rows}</dl></div>`;
+            }).join('');
+            document.getElementById('week').innerHTML = html;
+            document.getElementById('weekWrap').hidden = false;
+        }
+
+        document.getElementById('makeWeek').addEventListener('click', () => {
+            makeWeek();
+            document.getElementById('weekWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        updateCount();
+        MEALS.forEach(rollMeal);
+        renderMeals();
+
+        // ---------- Breathing guide ----------
+        const circle = document.getElementById('breathCircle');
+        const count = document.getElementById('breathCount');
+        const breathBtn = document.getElementById('breathBtn');
+        let breathTimer = null, cycles = 0;
+
+        function phase(inhale) {
+            const secs = inhale ? 4 : 6;
+            circle.style.transitionDuration = secs + 's';
+            circle.style.transform = inhale ? 'scale(1.55)' : 'scale(0.8)';
+            circle.textContent = inhale ? '吸气 · 鼓肚' : '呼气 · 收腹';
+            if (inhale) count.textContent = `第 ${++cycles} 次呼吸`;
+            breathTimer = setTimeout(() => phase(!inhale), secs * 1000);
+        }
+
+        breathBtn.addEventListener('click', () => {
+            if (breathTimer) {
+                clearTimeout(breathTimer);
+                breathTimer = null;
+                circle.style.transitionDuration = '0.6s';
+                circle.style.transform = 'scale(0.8)';
+                circle.textContent = '准备';
+                count.textContent = `已完成 ${cycles} 次 · 吸气 4 秒 · 呼气 6 秒`;
+                breathBtn.textContent = '▶ 跟着练习';
+            } else {
+                cycles = 0;
+                breathBtn.textContent = '⏸ 停止';
+                phase(true);
+            }
+        });
+    </script>
 
 </body>
 </html>
