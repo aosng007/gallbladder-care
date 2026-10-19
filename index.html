@@ -736,6 +736,39 @@
         .ref-table th { color: var(--muted); font-weight: 600; font-size: 0.82rem; }
         .ref-table .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 0.4rem; }
 
+        /* ---------- Status (hidden, #status) ---------- */
+        .status-login { display: flex; gap: 0.6rem; flex-wrap: wrap; max-width: 460px; }
+        .status-login .input-unit { flex: 1; min-width: 200px; }
+        .status-msg { margin-top: 0.6rem; font-size: 0.9rem; color: #C2410C; min-height: 1.4em; }
+
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat {
+            background: linear-gradient(160deg, #FFFFFF, var(--primary-light));
+            border: 1px solid #DCEDDA;
+            border-radius: 14px;
+            padding: 0.8rem 1rem;
+        }
+
+        .stat span { font-size: 0.8rem; color: var(--muted); }
+        .stat b { display: block; font-size: 1.4rem; color: var(--primary-dark); }
+
+        .status-tools { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.8rem; }
+        .status-tools .input-unit { flex: 1; min-width: 200px; }
+
+        .table-scroll { overflow-x: auto; border: 1px solid #E3ECE2; border-radius: 12px; background: white; }
+        .visits-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+        .visits-table th, .visits-table td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid #EEF3EE; white-space: nowrap; }
+        .visits-table th { position: sticky; top: 0; background: #F6FAF5; color: var(--muted); font-weight: 600; }
+        .visits-table td.ip { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+        .visits-table td.ip button { border: none; background: none; cursor: pointer; font: inherit; color: var(--us); padding: 0; }
+        .visits-table tr:hover td { background: #FAFDF9; }
+
         /* ---------- Care ---------- */
         .tips {
             list-style: none;
@@ -788,7 +821,7 @@
         }
 
         @media print {
-            nav.tabs, .toolbar, .icon-btn, .reroll, header .blob { display: none !important; }
+            nav.tabs, .toolbar, .icon-btn, .reroll, header .blob, #status { display: none !important; }
             .panel { display: block !important; }
             body { background: white; }
             .card { box-shadow: none; border: 1px solid #ddd; }
@@ -1087,10 +1120,49 @@
             </div>
         </section>
 
+        <!-- ================= 访问记录（隐藏，#status） ================= -->
+        <section class="panel" id="status" role="tabpanel">
+            <div class="card">
+                <h2>🔒 访问记录</h2>
+
+                <div id="statusLogin">
+                    <p class="lead">请输入访问密钥（Vercel 环境变量 STATUS_KEY）。</p>
+                    <form class="status-login" id="statusForm">
+                        <div class="input-unit"><input id="statusKey" type="password" autocomplete="current-password" placeholder="访问密钥"></div>
+                        <button class="btn btn-primary" type="submit">查看</button>
+                    </form>
+                </div>
+
+                <div id="statusData" hidden>
+                    <div class="stat-row">
+                        <div class="stat"><span>总访问次数</span><b id="statTotal">0</b></div>
+                        <div class="stat"><span>独立 IP</span><b id="statUnique">0</b></div>
+                        <div class="stat"><span>今日访问</span><b id="statToday">0</b></div>
+                        <div class="stat"><span>最近一次</span><b id="statLast" style="font-size:1rem;">--</b></div>
+                    </div>
+                    <div class="status-tools">
+                        <div class="input-unit"><input id="statusFilter" type="search" placeholder="筛选 IP / 城市 / 设备 / 页面"></div>
+                        <button class="btn btn-ghost" id="statusRefresh" type="button">↻ 刷新</button>
+                        <button class="btn btn-ghost" id="statusLogout" type="button">退出</button>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="visits-table">
+                            <thead><tr><th>时间</th><th>IP</th><th>位置</th><th>设备</th><th>页面</th><th>来源</th></tr></thead>
+                            <tbody id="visitsBody"></tbody>
+                        </table>
+                    </div>
+                    <p class="combo-count" style="margin-top:0.6rem;">保留最近 1000 条记录。点击 IP 只看该 IP 的访问。登录过的浏览器不会再被记录。</p>
+                </div>
+
+                <div class="status-msg" id="statusMsg"></div>
+            </div>
+        </section>
+
     </main>
 
     <footer>
         <p>本指南为术后膳食与生活参考，具体个人营养及运动需求请遵医嘱。</p>
+        <p>隐私提示：本站会记录访问 IP、大致地区与设备类型，仅用于了解访问情况，不会用于其他用途。</p>
     </footer>
 
     <script>
@@ -1100,12 +1172,124 @@
             if (!document.getElementById(id)) id = 'principles';
             tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === id));
             document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+            if (id === 'status') openStatus();
         }
         tabs.forEach(t => t.addEventListener('click', () => {
             history.replaceState(null, '', '#' + t.dataset.tab);
             showTab(t.dataset.tab);
         }));
+        window.addEventListener('hashchange', () => showTab(location.hash.slice(1)));
         showTab(location.hash.slice(1));
+
+        // ---------- Visit tracking (skipped on #status and for the owner's browser) ----------
+        if (location.hash !== '#status' && !localStorage.getItem('gc-notrack')) {
+            fetch('/api/track', {
+                method: 'POST',
+                keepalive: true,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ page: location.hash || '#principles', ref: document.referrer })
+            }).catch(() => {});
+        }
+
+        // ---------- Hidden visit log (#status) ----------
+        let visitsCache = [];
+
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+        function deviceOf(ua) {
+            ua = ua || '';
+            const os = /iPhone|iPad/.test(ua) ? 'iOS' : /Android/.test(ua) ? 'Android' : /Mac OS X/.test(ua) ? 'macOS'
+                : /Windows/.test(ua) ? 'Windows' : /Linux/.test(ua) ? 'Linux' : '其他';
+            const browser = /MicroMessenger/.test(ua) ? '微信' : /Edg\//.test(ua) ? 'Edge' : /Chrome\//.test(ua) ? 'Chrome'
+                : /Firefox\//.test(ua) ? 'Firefox' : /Safari\//.test(ua) ? 'Safari' : /bot|crawl|spider/i.test(ua) ? '爬虫' : '其他';
+            const kind = /Mobile|iPhone|Android/.test(ua) ? '📱' : '💻';
+            return `${kind} ${os} · ${browser}`;
+        }
+
+        function placeOf(v) {
+            return [v.city, v.region, v.country].filter(Boolean).join(', ') || '--';
+        }
+
+        function setStatusMsg(text) {
+            document.getElementById('statusMsg').textContent = text;
+        }
+
+        async function loadVisits() {
+            const key = sessionStorage.getItem('gc-status-key');
+            if (!key) return false;
+            setStatusMsg('加载中…');
+            try {
+                const res = await fetch('/api/visits', { headers: { Authorization: 'Bearer ' + key }, cache: 'no-store' });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    if (res.status === 401) sessionStorage.removeItem('gc-status-key');
+                    setStatusMsg(data.error || `请求失败（${res.status}）`);
+                    return false;
+                }
+                localStorage.setItem('gc-notrack', '1');
+                visitsCache = data.visits || [];
+                renderVisits();
+                setStatusMsg('');
+                return true;
+            } catch {
+                setStatusMsg('无法连接服务器（本地预览时没有后端接口）');
+                return false;
+            }
+        }
+
+        function renderVisits() {
+            const today = new Date().toDateString();
+            const all = visitsCache;
+            document.getElementById('statTotal').textContent = all.length;
+            document.getElementById('statUnique').textContent = new Set(all.map(v => v.ip)).size;
+            document.getElementById('statToday').textContent = all.filter(v => new Date(v.t).toDateString() === today).length;
+            document.getElementById('statLast').textContent = all[0] ? new Date(all[0].t).toLocaleString('zh-CN') : '--';
+
+            const q = document.getElementById('statusFilter').value.trim().toLowerCase();
+            const rows = all.filter(v => !q || [v.ip, placeOf(v), deviceOf(v.ua), v.page, v.ref].join(' ').toLowerCase().includes(q));
+
+            document.getElementById('visitsBody').innerHTML = rows.length ? rows.map(v => `
+                <tr>
+                    <td>${esc(new Date(v.t).toLocaleString('zh-CN'))}</td>
+                    <td class="ip"><button type="button" data-ip="${esc(v.ip)}">${esc(v.ip)}</button></td>
+                    <td>${esc(placeOf(v))}</td>
+                    <td title="${esc(v.ua)}">${esc(deviceOf(v.ua))}</td>
+                    <td>${esc(v.page || '--')}</td>
+                    <td>${esc(v.ref || '直接访问')}</td>
+                </tr>`).join('') : '<tr><td colspan="6" style="text-align:center; color:var(--muted);">暂无记录</td></tr>';
+
+            document.getElementById('statusLogin').hidden = true;
+            document.getElementById('statusData').hidden = false;
+        }
+
+        function openStatus() {
+            const hasKey = !!sessionStorage.getItem('gc-status-key');
+            document.getElementById('statusLogin').hidden = hasKey;
+            document.getElementById('statusData').hidden = true;
+            if (hasKey) loadVisits().then(ok => { if (!ok) document.getElementById('statusLogin').hidden = false; });
+        }
+
+        document.getElementById('statusForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            const key = document.getElementById('statusKey').value.trim();
+            if (!key) return;
+            sessionStorage.setItem('gc-status-key', key);
+            if (await loadVisits()) document.getElementById('statusKey').value = '';
+        });
+        document.getElementById('statusRefresh').addEventListener('click', loadVisits);
+        document.getElementById('statusLogout').addEventListener('click', () => {
+            sessionStorage.removeItem('gc-status-key');
+            visitsCache = [];
+            openStatus();
+            setStatusMsg('');
+        });
+        document.getElementById('statusFilter').addEventListener('input', renderVisits);
+        document.getElementById('visitsBody').addEventListener('click', e => {
+            const b = e.target.closest('button[data-ip]');
+            if (!b) return;
+            document.getElementById('statusFilter').value = b.dataset.ip;
+            renderVisits();
+        });
 
         // ---------- Recipe data: [name, style] ----------
         const MEALS = [
