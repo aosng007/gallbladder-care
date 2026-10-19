@@ -93,8 +93,10 @@ export default async function handler(req, res) {
         return;
     }
 
-    const gemini = process.env.GEMINI_API_KEY;
-    const vision = process.env.GOOGLE_VISION_API_KEY;
+    // Tolerate keys pasted with surrounding whitespace, newlines or quotes
+    const cleanKey = v => (v || '').trim().replace(/^["']+|["']+$/g, '').trim();
+    const gemini = cleanKey(process.env.GEMINI_API_KEY);
+    const vision = cleanKey(process.env.GOOGLE_VISION_API_KEY);
     if (!gemini && !vision) {
         res.status(503).json({ error: '拍照读数还没有配置' });
         return;
