@@ -12,6 +12,30 @@ const PROMPT = `这是一张体重秤显示屏的照片。请读出秤上显示�
 unit 只能是 "kg"、"jin"（斤）、"lb" 或 null（看不出单位）。
 如果看不清或照片里没有体重读数，返回 {"weight": null, "unit": null}。`;
 
+class GoogleError extends Error {
+    constructor(service, status, body) {
+        let info = {};
+        try { info = JSON.parse(body).error || {}; } catch { /* non-JSON error body */ }
+        const message = info.message || body.slice(0, 200);
+        super(`${service} HTTP ${status}: ${message}`);
+        this.status = status;
+        this.detail = `${service} ${status}${info.status ? ' ' + info.status : ''}: ${message}`.slice(0, 300);
+        this.hint = explain(status, `${info.status || ''} ${message}`);
+    }
+}
+
+// Turn common Google API failures into an actionable hint (shown to the user)
+function explain(status, text) {
+    if (/API key not valid|API_KEY_INVALID/i.test(text)) return '密钥无效，请检查 Vercel 里填的密钥是否完整正确';
+    if (/referer|referrer|ip address|android|ios/i.test(text) && status === 403) return '密钥设置了使用限制（网站/IP），请在 Google 控制台把“应用限制”改为“无”';
+    if (/has not been used|is disabled|SERVICE_DISABLED|not enabled/i.test(text)) return '这个密钥所在的 Google 项目没有启用对应的 API';
+    if (/API_KEY_SERVICE_BLOCKED|blocked/i.test(text)) return '密钥不允许调用这个 API（API 限制），请检查密钥的“API 限制”设置';
+    if (status === 429 || /RESOURCE_EXHAUSTED|quota/i.test(text)) return 'Google 额度用完了，请稍后再试或检查账单设置';
+    if (status === 404) return '模型不可用，可以在 Vercel 设置 GEMINI_MODEL 换一个型号';
+    if (/location|region|not supported/i.test(text)) return '当前地区不支持这个服务';
+    return '识别服务暂时不可用';
+}
+
 function toKg(weight, unit) {
     if (typeof weight !== 'number' || !isFinite(weight)) return null;
     const kg = unit === 'jin' ? weight / 2 : unit === 'lb' ? weight * 0.45359237 : weight;
@@ -28,7 +52,7 @@ async function readWithGemini(image, key) {
             generationConfig: { responseMimeType: 'application/json', temperature: 0 }
         })
     });
-    if (!res.ok) throw new Error(`Gemini HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    if (!res.ok) throw new GoogleError('Gemini', res.status, await res.text());
     const data = await res.json();
     const text = data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
     const parsed = JSON.parse(text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1) || '{}');
@@ -42,7 +66,7 @@ async function readWithVision(image, key) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ requests: [{ image: { content: image }, features: [{ type: 'TEXT_DETECTION' }] }] })
     });
-    if (!res.ok) throw new Error(`Vision HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    if (!res.ok) throw new GoogleError('Vision', res.status, await res.text());
     const data = await res.json();
     const text = data.responses?.[0]?.fullTextAnnotation?.text || '';
     const unit = /lb/i.test(text) ? 'lb' : /斤/.test(text) ? 'jin' : /kg/i.test(text) ? 'kg' : null;
@@ -91,6 +115,10 @@ export default async function handler(req, res) {
         res.status(200).json({ kg: toKg(result.weight, result.unit), weight: result.weight ?? null, unit: result.unit });
     } catch (err) {
         console.error('scale read failed:', err);
-        res.status(502).json({ error: '识别服务暂时不可用' });
+        res.status(502).json({
+            error: err.hint || '识别服务暂时不可用',
+            // Google's own message (never contains the key) so problems can be diagnosed without logs
+            detail: err.detail || String(err.message || err).slice(0, 300)
+        });
     }
 }

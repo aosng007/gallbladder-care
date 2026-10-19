@@ -2401,7 +2401,7 @@
                 });
                 const data = await res.json().catch(() => ({}));
                 if (!res.ok) {
-                    setScaleMsg(data.error || `识别失败（${res.status}），请手动输入`, 'err');
+                    setScaleMsg((data.error || `识别失败（${res.status}），请手动输入`) + (data.detail ? `（${data.detail}）` : ''), 'err');
                     return;
                 }
                 if (!(data.kg >= 25 && data.kg <= 250)) {
