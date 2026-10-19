@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>胆囊切除术后女士低脂养护指南（饮食 · 运动 · 护理）</title>
     <style>
         :root {
@@ -165,6 +165,63 @@
             color: white;
             background: linear-gradient(135deg, #2E7D32, #43A047);
             box-shadow: 0 4px 14px rgba(46, 125, 50, 0.35);
+        }
+
+        .tab-btn .ti { margin-right: 0.3rem; }
+        .tab-btn .tl.short { display: none; }
+
+        /* Mobile: all tabs in a fixed bottom bar, icon above a short label */
+        @media (max-width: 640px) {
+            nav.tabs {
+                position: fixed;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 20;
+                padding: 0.4rem 0.5rem calc(0.4rem + env(safe-area-inset-bottom));
+                background: rgba(255, 255, 255, 0.9);
+                border-top: 1px solid rgba(46, 125, 50, 0.12);
+                box-shadow: 0 -6px 20px rgba(46, 125, 50, 0.08);
+            }
+
+            .tab-list {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                width: 100%;
+                gap: 0.2rem;
+                padding: 0;
+                background: transparent;
+                box-shadow: none;
+                border-radius: 0;
+                overflow: visible;
+            }
+
+            .tab-btn {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.1rem;
+                padding: 0.35rem 0;
+                border-radius: 14px;
+                font-size: 0.72rem;
+                line-height: 1.2;
+            }
+
+            .tab-btn .ti { margin: 0; font-size: 1.25rem; line-height: 1.2; }
+            .tab-btn .tl.full { display: none; }
+            .tab-btn .tl.short { display: inline; }
+            .tab-btn:hover { background: transparent; }
+
+            .tab-btn.active {
+                color: var(--primary-dark);
+                font-weight: 700;
+                background: var(--primary-light);
+                box-shadow: none;
+            }
+
+            /* Keep the last content clear of the bottom bar */
+            body { padding-bottom: calc(4.4rem + env(safe-area-inset-bottom)); }
         }
 
         /* ---------- Layout ---------- */
@@ -1115,12 +1172,12 @@
 
     <nav class="tabs">
         <div class="tab-list" role="tablist">
-            <button class="tab-btn active" role="tab" data-tab="today">🌱 今日</button>
-            <button class="tab-btn" role="tab" data-tab="principles">💡 饮食原则</button>
-            <button class="tab-btn" role="tab" data-tab="recipes">🍽️ 食谱搭配</button>
-            <button class="tab-btn" role="tab" data-tab="exercise">🏃‍♀️ 运动</button>
-            <button class="tab-btn" role="tab" data-tab="bmi">📏 BMI</button>
-            <button class="tab-btn" role="tab" data-tab="care">💗 护理</button>
+            <button class="tab-btn active" role="tab" data-tab="today"><span class="ti">🌱</span><span class="tl full">今日</span><span class="tl short">今日</span></button>
+            <button class="tab-btn" role="tab" data-tab="principles"><span class="ti">💡</span><span class="tl full">饮食原则</span><span class="tl short">饮食</span></button>
+            <button class="tab-btn" role="tab" data-tab="recipes"><span class="ti">🍽️</span><span class="tl full">食谱搭配</span><span class="tl short">食谱</span></button>
+            <button class="tab-btn" role="tab" data-tab="exercise"><span class="ti">🏃‍♀️</span><span class="tl full">运动</span><span class="tl short">运动</span></button>
+            <button class="tab-btn" role="tab" data-tab="bmi"><span class="ti">📏</span><span class="tl full">BMI</span><span class="tl short">BMI</span></button>
+            <button class="tab-btn" role="tab" data-tab="care"><span class="ti">💗</span><span class="tl full">护理</span><span class="tl short">护理</span></button>
         </div>
     </nav>
 
@@ -1568,6 +1625,9 @@
         tabs.forEach(t => t.addEventListener('click', () => {
             history.replaceState(null, '', '#' + t.dataset.tab);
             showTab(t.dataset.tab);
+            // With the bottom bar on mobile, start the new tab at the top of its content
+            const top = document.querySelector('main.container').getBoundingClientRect().top + window.scrollY;
+            if (window.scrollY > top) window.scrollTo({ top, behavior: 'smooth' });
         }));
         window.addEventListener('hashchange', () => showTab(location.hash.slice(1)));
         showTab(location.hash.slice(1));
