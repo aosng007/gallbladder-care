@@ -34,6 +34,9 @@
 
         * { box-sizing: border-box; }
 
+        /* The hidden attribute must win over component display rules (e.g. .install-banner is display:flex) */
+        [hidden] { display: none !important; }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", Roboto, Arial, sans-serif;
             line-height: 1.7;
