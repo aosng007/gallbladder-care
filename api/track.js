@@ -1,4 +1,5 @@
 import { isConfigured, pipeline, VISITS_KEY, MAX_VISITS } from './_redis.js';
+import { clientIp, isExcluded } from './_ip.js';
 
 const header = (req, name) => {
     const v = req.headers[name];
@@ -23,11 +24,13 @@ export default async function handler(req, res) {
         return;
     }
 
+    const ip = clientIp(req);
+    if (isExcluded(ip)) {
+        res.status(204).end();
+        return;
+    }
+
     const body = req.body && typeof req.body === 'object' ? req.body : {};
-    const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim()
-        || req.headers['x-real-ip']
-        || req.socket?.remoteAddress
-        || 'unknown';
 
     const visit = {
         t: new Date().toISOString(),

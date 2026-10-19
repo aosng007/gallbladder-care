@@ -1140,6 +1140,7 @@
                         <div class="stat"><span>今日访问</span><b id="statToday">0</b></div>
                         <div class="stat"><span>最近一次</span><b id="statLast" style="font-size:1rem;">--</b></div>
                     </div>
+                    <p class="combo-count" id="statusYou" style="margin:-0.3rem 0 0.8rem;"></p>
                     <div class="status-tools">
                         <div class="input-unit"><input id="statusFilter" type="search" placeholder="筛选 IP / 城市 / 设备 / 页面"></div>
                         <button class="btn btn-ghost" id="statusRefresh" type="button">↻ 刷新</button>
@@ -1227,6 +1228,11 @@
                 }
                 localStorage.setItem('gc-notrack', '1');
                 visitsCache = data.visits || [];
+                document.getElementById('statusYou').innerHTML = data.you
+                    ? `你当前的 IP：<strong>${esc(data.you)}</strong> · ${data.youExcluded
+                        ? '✅ 已排除，不会被记录'
+                        : '⚠️ 未排除。在 Vercel 环境变量 EXCLUDE_IPS 中加入此 IP 并重新部署即可排除'}`
+                    : '';
                 renderVisits();
                 setStatusMsg('');
                 return true;
