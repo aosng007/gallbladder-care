@@ -1625,8 +1625,11 @@
         tabs.forEach(t => t.addEventListener('click', () => {
             history.replaceState(null, '', '#' + t.dataset.tab);
             showTab(t.dataset.tab);
-            // With the bottom bar on mobile, start the new tab at the top of its content
-            const top = document.querySelector('main.container').getBoundingClientRect().top + window.scrollY;
+            // Start the new tab at the top of its content; on desktop the sticky top bar
+            // would otherwise cover it, so leave room for it (the mobile bar sits at the bottom)
+            const nav = document.querySelector('nav.tabs');
+            const navRoom = getComputedStyle(nav).position === 'sticky' ? nav.offsetHeight : 0;
+            const top = document.querySelector('main.container').getBoundingClientRect().top + window.scrollY - navRoom;
             if (window.scrollY > top) window.scrollTo({ top, behavior: 'smooth' });
         }));
         window.addEventListener('hashchange', () => showTab(location.hash.slice(1)));
