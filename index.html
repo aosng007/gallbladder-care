@@ -950,6 +950,12 @@
 
         .bmi-advice a { color: var(--primary); font-weight: 600; }
 
+        .btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+        .log-table .down { color: #2E7D32; }
+        .log-table .up { color: #E65100; }
+        .log-table .del { border: none; background: none; cursor: pointer; color: var(--muted); font-size: 1rem; padding: 0 0.2rem; }
+        .log-table .del:hover { color: #C62828; }
+
         .ref-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
         .ref-table th, .ref-table td { padding: 0.55rem 0.8rem; text-align: left; border-bottom: 1px solid #EEF3EE; }
         .ref-table th { color: var(--muted); font-weight: 600; font-size: 0.82rem; }
@@ -1375,7 +1381,9 @@
                             <label for="bmiWaist">腰围 <small>（选填，肚脐上方一圈）</small></label>
                             <div class="input-unit"><input id="bmiWaist" type="number" inputmode="decimal" min="40" max="200" step="0.1" placeholder="例如 75"><span>厘米</span></div>
                         </div>
-                        <button class="btn btn-ghost" id="bmiReset" type="button">↺ 清空重填</button>
+                        <button class="btn btn-primary" id="bmiSave" type="button" disabled>📝 记录本次</button>
+                        <button class="btn btn-ghost" id="bmiReset" type="button">↺ 清空体重和腰围</button>
+                        <p class="combo-count" id="bmiSaveMsg" style="margin:0; min-height:1.4em;"></p>
                     </div>
 
                     <div class="bmi-result" id="bmiResult" aria-live="polite">
@@ -1397,6 +1405,22 @@
                         <div class="bmi-advice" id="bmiAdvice">输入数据后，这里会显示针对你的饮食与运动小建议。</div>
                     </div>
                 </div>
+            </div>
+
+            <div class="card">
+                <h2>📒 体重记录</h2>
+                <div class="status-tools">
+                    <button class="btn btn-ghost" id="logCsv" type="button">⬇ 导出 CSV</button>
+                    <button class="btn btn-ghost" id="logTxt" type="button">⬇ 导出 TXT</button>
+                    <button class="btn btn-ghost" id="logClear" type="button">🗑 清空记录</button>
+                </div>
+                <div class="table-scroll">
+                    <table class="visits-table log-table">
+                        <thead><tr><th>日期</th><th>时间</th><th>体重</th><th>变化</th><th>腰围</th><th>BMI</th><th>分类</th><th></th></tr></thead>
+                        <tbody id="logBody"></tbody>
+                    </table>
+                </div>
+                <p class="combo-count" style="margin-top:0.6rem;">记录只保存在这台设备的浏览器里，不会上传。换手机或清除浏览器数据前，记得先导出备份。</p>
             </div>
 
             <div class="card">
@@ -2145,12 +2169,19 @@
             result: document.getElementById('bmiResult')
         };
 
+        const bmiSave = document.getElementById('bmiSave');
+        let lastBmi = null;
+
         function calcBmi() {
             const h = parseFloat(bmiEls.h.value) / 100;
             const w = parseFloat(bmiEls.w.value);
             const waist = parseFloat(bmiEls.waist.value);
 
+            if (h >= 1 && h <= 2.3) localStorage.setItem('gc-height', bmiEls.h.value);
+
             if (!(h >= 1 && h <= 2.3 && w >= 25 && w <= 250)) {
+                lastBmi = null;
+                bmiSave.disabled = true;
                 bmiEls.result.style.removeProperty('--level');
                 bmiEls.value.textContent = '--';
                 bmiEls.level.textContent = '请输入身高和体重';
@@ -2165,6 +2196,9 @@
             const bmi = Math.round(w / (h * h) * 10) / 10;
             const lvl = BMI_LEVELS.find(l => bmi < l.max);
             const low = 18.5 * h * h, high = 23.9 * h * h;
+
+            lastBmi = { height: h * 100, weight: w, waist: waist >= 40 && waist <= 200 ? waist : null, bmi, level: lvl.name };
+            bmiSave.disabled = false;
 
             bmiEls.result.style.setProperty('--level', lvl.color);
             bmiEls.value.textContent = bmi.toFixed(1);
@@ -2187,11 +2221,128 @@
         }
 
         [bmiEls.h, bmiEls.w, bmiEls.waist].forEach(el => el.addEventListener('input', calcBmi));
+        // Height is remembered after the first entry; weight and waist start empty each visit
+        bmiEls.h.value = localStorage.getItem('gc-height') || '';
+        calcBmi();
+
         document.getElementById('bmiReset').addEventListener('click', () => {
-            bmiEls.h.value = bmiEls.w.value = bmiEls.waist.value = '';
+            bmiEls.w.value = bmiEls.waist.value = '';
             calcBmi();
-            bmiEls.h.focus();
+            bmiEls.w.focus();
         });
+
+        // ---------- 体重记录 (local only) ----------
+        const LOG_KEY = 'gc-bmi-log';
+        const loadLog = () => { try { return JSON.parse(localStorage.getItem(LOG_KEY)) || []; } catch { return []; } };
+        const saveLog = log => localStorage.setItem(LOG_KEY, JSON.stringify(log));
+        const pad = n => String(n).padStart(2, '0');
+        const fmtDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        const fmtTime = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        const num = (v, digits = 1) => v == null ? '' : Number(v).toFixed(digits);
+
+        function renderLog() {
+            const log = loadLog(); // oldest first
+            const body = document.getElementById('logBody');
+            if (!log.length) {
+                body.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--muted);">还没有记录，填好体重后点「记录本次」</td></tr>';
+                return;
+            }
+            const rows = log.map((e, i) => {
+                const d = new Date(e.t);
+                const prev = log[i - 1];
+                const delta = prev ? +(e.weight - prev.weight).toFixed(1) : null;
+                const tr = document.createElement('tr');
+                const cells = [fmtDate(d), fmtTime(d), `${num(e.weight)} kg`,
+                    delta == null ? '--' : delta === 0 ? '持平' : `${delta < 0 ? '↓' : '↑'}${Math.abs(delta).toFixed(1)}`,
+                    e.waist == null ? '--' : `${num(e.waist)} cm`, num(e.bmi), e.level];
+                cells.forEach((c, j) => {
+                    const td = document.createElement('td');
+                    td.textContent = c;
+                    if (j === 3 && delta) td.className = delta < 0 ? 'down' : 'up';
+                    tr.appendChild(td);
+                });
+                const td = document.createElement('td');
+                const del = document.createElement('button');
+                del.className = 'del';
+                del.type = 'button';
+                del.title = '删除这条';
+                del.textContent = '×';
+                del.dataset.t = e.t;
+                td.appendChild(del);
+                tr.appendChild(td);
+                return tr;
+            });
+            body.replaceChildren(...rows.reverse()); // newest first
+        }
+
+        bmiSave.addEventListener('click', () => {
+            if (!lastBmi) return;
+            const log = loadLog();
+            log.push({ t: new Date().toISOString(), ...lastBmi });
+            saveLog(log);
+            renderLog();
+            const msg = document.getElementById('bmiSaveMsg');
+            msg.textContent = `✓ 已记录 ${fmtTime(new Date())} · ${num(lastBmi.weight)} kg`;
+            setTimeout(() => { msg.textContent = ''; }, 3000);
+        });
+
+        document.getElementById('logBody').addEventListener('click', e => {
+            const b = e.target.closest('button.del');
+            if (!b) return;
+            saveLog(loadLog().filter(x => x.t !== b.dataset.t));
+            renderLog();
+        });
+
+        // Two taps to clear, so a stray tap can't wipe the history
+        const logClear = document.getElementById('logClear');
+        let clearArmed = null;
+        logClear.addEventListener('click', () => {
+            if (!clearArmed) {
+                logClear.textContent = '⚠️ 再点一次确认清空';
+                clearArmed = setTimeout(() => { clearArmed = null; logClear.textContent = '🗑 清空记录'; }, 3000);
+                return;
+            }
+            clearTimeout(clearArmed);
+            clearArmed = null;
+            logClear.textContent = '🗑 清空记录';
+            localStorage.removeItem(LOG_KEY);
+            renderLog();
+        });
+
+        function download(name, text, type) {
+            const url = URL.createObjectURL(new Blob([text], { type }));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        const exportName = ext => `体重记录-${fmtDate(new Date()).replace(/-/g, '')}.${ext}`;
+
+        document.getElementById('logCsv').addEventListener('click', () => {
+            const rows = [['日期', '时间', '身高(cm)', '体重(kg)', '腰围(cm)', 'BMI', '分类']];
+            loadLog().forEach(e => {
+                const d = new Date(e.t);
+                rows.push([fmtDate(d), fmtTime(d), num(e.height), num(e.weight), num(e.waist), num(e.bmi), e.level]);
+            });
+            // BOM so Excel opens the Chinese headers correctly
+            download(exportName('csv'), '﻿' + rows.map(r => r.join(',')).join('\r\n'), 'text/csv;charset=utf-8');
+        });
+
+        document.getElementById('logTxt').addEventListener('click', () => {
+            const lines = ['体重记录', ''];
+            loadLog().forEach(e => {
+                const d = new Date(e.t);
+                lines.push(`${fmtDate(d)} ${fmtTime(d)}  体重 ${num(e.weight)} kg` +
+                    (e.waist == null ? '' : `  腰围 ${num(e.waist)} cm`) + `  BMI ${num(e.bmi)}（${e.level}）`);
+            });
+            download(exportName('txt'), lines.join('\r\n'), 'text/plain;charset=utf-8');
+        });
+
+        renderLog();
         bmiEls.advice.addEventListener('click', e => {
             const a = e.target.closest('a[href^="#"]');
             if (!a) return;
